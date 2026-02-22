@@ -18,10 +18,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://your-live-domain.com", // Your deployed frontend domain
-    ],
+    origin: ["http://localhost:5173", "https://pathaikkaramana.vercel.app"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],

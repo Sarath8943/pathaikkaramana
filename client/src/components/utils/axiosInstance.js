@@ -1,15 +1,13 @@
-// src/utils/axiosInstance.js
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000", // Backend URL
-  withCredentials: true, // send cookies/token automatically
+  baseURL: "https://pathaikkaramana.onrender.com",
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Optional: Request interceptor (for debugging or adding token)
 axiosInstance.interceptors.request.use(
   (config) => {
     console.log("Request URL:", config.url);
@@ -18,7 +16,6 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// Response interceptor for better error handling
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
