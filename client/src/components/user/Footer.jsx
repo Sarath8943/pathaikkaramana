@@ -13,11 +13,11 @@ export const Footer = () => {
   const { t } = useTranslation();
 
   return (
-    // 'max-w-full' ഉം 'overflow-x-hidden' ഉം ചേർത്തു, ഇത് സ്ക്രീൻ വിഡ്ത്ത് കൂടുന്നത് ഒഴിവാക്കും
-    <footer className="bg-gray-900 text-gray-300 py-10 md:py-16 relative w-full max-w-full overflow-x-hidden border-t border-gray-800">
+    <footer className="bg-gray-900 text-gray-300 py-10 md:py-16 w-full overflow-x-hidden border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-        {/* ഗ്രിഡ് ഫോണുകളിൽ ഒറ്റ കോളവും ലാപ്ടോപ്പിൽ മൂന്നും കോളവുമാകും */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 justify-items-center md:justify-items-start">
+        {/* Grid: മൊബൈലിൽ 1 കോളം, ടാബ്‌ലെറ്റിൽ 3 കോളം */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12 justify-items-center">
+          
           {/* Section 1: Logo/Name */}
           <div className="text-center md:text-left flex flex-col items-center md:items-start w-full">
             <div className="flex items-center justify-center md:justify-start mb-4">
@@ -28,36 +28,28 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Section 2: Contact */}
+          {/* Section 2: Contact Info */}
           <div className="flex flex-col items-center md:items-start w-full">
             <h3 className="text-lg font-semibold text-amber-400 mb-5 border-b border-amber-400/30 pb-1 w-full text-center md:text-left">
               {t("contact_info")}
             </h3>
-            <ul className="space-y-4 text-sm w-full text-center md:text-left">
-              <li className="flex items-center justify-center md:justify-start space-x-3">
+            <ul className="space-y-4 text-sm w-full flex flex-col items-center md:items-start">
+              <li className="flex items-center space-x-3">
                 <FaPhoneAlt className="text-amber-400 shrink-0" />
-                <a
-                  href="tel:+917306327251"
-                  className="hover:text-amber-400 transition"
-                >
-                  {" "}
-                  +91 73063 27251{" "}
+                <a href="tel:+917306327251" className="hover:text-amber-400 transition">
+                  +91 73063 27251
                 </a>
               </li>
-              <li className="flex items-center justify-center md:justify-start space-x-3">
+              <li className="flex items-center space-x-3 w-full justify-center md:justify-start px-2">
                 <FaEnvelope className="text-amber-400 shrink-0" />
-                <a
-                  href="mailto:pathaikkaramana@gmail.com"
-                  className="hover:text-amber-400 transition break-all px-2"
-                >
+                <a href="mailto:pathaikkaramana@gmail.com" className="hover:text-amber-400 transition break-all text-center md:text-left">
                   pathaikkaramana@gmail.com
                 </a>
               </li>
-              <li className="flex items-start justify-center md:justify-start space-x-3">
+              <li className="flex items-start justify-center md:justify-start space-x-3 text-center md:text-left px-4 md:px-0">
                 <FaMapMarkerAlt className="text-amber-400 mt-1 shrink-0" />
-                <span className="max-w-[250px]">
-                  {t("temple_location") ||
-                    "Pathaikkara Mana, Perinthalmanna, Kerala 679322, India"}
+                <span className="max-w-[280px]">
+                  {t("temple_location") || "Pathaikkara Mana, Perinthalmanna, Kerala 679322, India"}
                 </span>
               </li>
             </ul>
@@ -91,11 +83,9 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Footer Bottom */}
         <div className="text-center border-t border-gray-800 pt-8">
           <p className="text-xs text-gray-500 uppercase tracking-widest">
-            © {new Date().getFullYear()} {t("temple_full_name")} |{" "}
-            {t("all_rights_reserved")}
+            © {new Date().getFullYear()} {t("temple_full_name")} | {t("all_rights_reserved")}
           </p>
         </div>
       </div>
