@@ -18,40 +18,23 @@ export const Home = () => {
   const [currentImage, setCurrentImage] = React.useState(0);
   const [currentArchImage, setCurrentArchImage] = React.useState(0);
 
-  // Hero Slider
+  // Sliders remain same
   React.useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 4000);
+    const interval = setInterval(() => setCurrentImage((p) => (p + 1) % images.length), 4000);
     return () => clearInterval(interval);
   }, []);
 
-  // Architecture Slider
   React.useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentArchImage((prev) => (prev + 1) % architectureImages.length);
-    }, 4000);
+    const interval = setInterval(() => setCurrentArchImage((p) => (p + 1) % architectureImages.length), 4000);
     return () => clearInterval(interval);
   }, []);
-
-  const slideUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
-  };
-
-  const slideLeft = {
-    hidden: { opacity: 0, x: -40 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.8 } },
-  };
-
-  const slideRight = {
-    hidden: { opacity: 0, x: 40 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.8 } },
-  };
 
   return (
-    <div className="bg-gray-50 text-gray-900 w-full">
-      <div className="relative w-full h-[60vh] md:h-screen overflow-hidden">
+    // മെയിൻ ഡിവിഷനിൽ w-full overflow-hidden നൽകി സ്പേസ് ഇല്ലാതാക്കുന്നു
+    <div className="bg-gray-50 text-gray-900 w-full overflow-x-hidden">
+      
+      {/* Hero Section */}
+      <div className="relative w-full h-[60vh] md:h-screen">
         {images.map((src, index) => (
           <motion.div
             key={index}
@@ -60,86 +43,58 @@ export const Home = () => {
             animate={{ opacity: index === currentImage ? 1 : 0 }}
             transition={{ duration: 1 }}
           >
-            <img
-              src={src}
-              alt="Temple Slide"
-              className="w-full h-full object-cover"
-            />
-
+            <img src={src} alt="Temple Slide" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/30" />
           </motion.div>
         ))}
 
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-          <motion.h1
-            className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-white drop-shadow-2xl mb-6"
-            style={{ textShadow: "3px 3px 6px rgba(0, 0, 0, 0.8)" }}
-            initial="hidden"
-            animate="visible"
-            variants={slideUp}
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-2">
+          <motion.h1 
+            className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-white drop-shadow-2xl"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
           >
             {t("home.hero_title")}
           </motion.h1>
         </div>
       </div>
 
-      <div className="bg-gray-100 w-full py-12 md:py-20 px-4">
+      {/* Main Content Section - grid-cols-1 ഫോണിൽ ഫുൾ വിഡ്ത്ത് നൽകുന്നു */}
+      <div className="bg-gray-100 w-full py-12 px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={slideLeft}
-            >
-              <div className="relative overflow-hidden rounded-xl shadow-2xl h-70 md:h-105">
-                {architectureImages.map((img, index) => (
-                  <motion.img
-                    key={index}
-                    src={img}
-                    alt="Architecture"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: index === currentArchImage ? 1 : 0 }}
-                    transition={{ duration: 1 }}
-                  />
-                ))}
-              </div>
-            </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
+            
+            <div className="relative w-full h-72 md:h-105 rounded-xl shadow-2xl overflow-hidden">
+              {architectureImages.map((img, index) => (
+                <motion.img
+                  key={index}
+                  src={img}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  animate={{ opacity: index === currentArchImage ? 1 : 0 }}
+                />
+              ))}
+            </div>
 
-            <motion.div
-              className="prose max-w-none text-gray-700 space-y-4"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={slideRight}
-            >
-              <div className="mb-6">
-                <h2 className="text-lg text-gray-700">
-                  {t("home.sub_heading")}
-                </h2>
-                <h1 className="text-2xl md:text-4xl font-bold text-yellow-700 border-b-2 border-yellow-700 pb-1">
-                  {t("home.main_title")}
-                </h1>
-              </div>
-
+            <div className="text-gray-700 space-y-4">
+              <h2 className="text-lg">{t("home.sub_heading")}</h2>
+              <h1 className="text-2xl md:text-4xl font-bold text-yellow-700 border-b-2 border-yellow-700 pb-2">
+                {t("home.main_title")}
+              </h1>
               <p className="leading-relaxed">{t("home.para1")}</p>
               <p className="leading-relaxed">{t("home.para2")}</p>
-              <p className="leading-relaxed">{t("home.para3")}</p>
-
-              <div className="mt-8 flex justify-center">
+              
+              <div className="pt-4">
                 <button
                   onClick={() => navigate("/history")}
-                  className="bg-yellow-700 text-white px-6 py-2 rounded-md hover:bg-yellow-800 transition"
+                  className="bg-yellow-700 text-white px-8 py-3 rounded-lg hover:bg-yellow-800 transition w-full md:w-auto"
                 >
                   {t("home.button")}
                 </button>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
-
       <GalleryFuter />
     </div>
   );
