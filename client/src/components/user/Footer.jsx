@@ -74,32 +74,34 @@ export const Footer = () => {
               </li>
             </ul>
           </div>
-
           <div className="flex flex-col items-center md:items-start w-full md:w-auto">
             <h3 className="text-lg font-semibold text-amber-400 mb-5 border-b border-amber-400/30 pb-1 w-full text-center md:text-left">
               {t("temple_timings")}
             </h3>
-            <div className="bg-gray-800/30 p-5 rounded-2xl border border-gray-700 w-full max-w-[320px] shadow-inner">
-              <div className="space-y-4">
-                <div className="flex justify-between items-center gap-4">
+
+            <div className="bg-gray-800/30 p-4 rounded-2xl border border-gray-700 w-full max-w-[320px]">
+              <div className="space-y-3">
+                {/* Morning Row */}
+                <div className="flex justify-between items-center gap-3">
                   <div className="flex items-center space-x-2">
                     <FaClock className="text-amber-400 shrink-0" />
-                    <span className="font-medium text-white">
+                    <span className="font-medium text-white text-sm">
                       {t("morning")}
                     </span>
                   </div>
-                  <span className="text-[11px] md:text-xs text-gray-300 bg-gray-700 px-2 py-1 rounded">
+                  <span className="text-[12px] text-gray-200 bg-gray-700 px-3 py-1 rounded-md font-mono whitespace-nowrap">
                     6:00 - 8:30 AM
                   </span>
                 </div>
-                <div className="flex justify-between items-center gap-4">
+
+                <div className="flex justify-between items-center gap-3">
                   <div className="flex items-center space-x-2">
                     <FaClock className="text-amber-400 shrink-0" />
-                    <span className="font-medium text-white">
+                    <span className="font-medium text-white text-sm">
                       {t("evening")}
                     </span>
                   </div>
-                  <span className="text-[11px] md:text-xs text-gray-300 bg-gray-700 px-2 py-1 rounded">
+                  <span className="text-[12px] text-gray-200 bg-gray-700 px-3 py-1 rounded-md font-mono whitespace-nowrap">
                     5:00 - 7:00 PM
                   </span>
                 </div>
