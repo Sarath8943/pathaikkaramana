@@ -48,7 +48,7 @@ export const Footer = () => {
                 </li>
                 <li className="flex items-start gap-3 text-left">
                   <FaMapMarkerAlt className="text-amber-400 text-xs mt-1 shrink-0" />
-                  <span className="leading-snug max-w-[250px]">{t("temple_location")}</span>
+                  <span className="leading-snug max-w-62.5">{t("temple_location")}</span>
                 </li>
               </ul>
             </div>
