@@ -1,0 +1,209 @@
+{
+  "temple_name": "Pathaikkara Mana Bhagavathy Temple",
+  "home_nav": "Home",
+  "history": "Temple History",
+  "pooja": "Pooja Timings",
+  "offering": "Offerings",
+  "festival": "Festival",
+  "gallery": "Gallery",
+  "contact": "Contact",
+  "temple_full_name": "Pathaikkara Mana Bhagavathy Temple",
+  "contact_info": "Contact Information",
+  "temple_location": "Pathaikkara Mana, Perinthalmanna, Kerala 679322, India",
+  "temple_timings": "Temple Timings",
+  "morning": "Morning",
+  "evening": "Evening",
+  "all_rights_reserved": "All Rights Reserved",
+  "title": "Offering Details",
+  "offerings": [
+    {
+      "title": "Bhagavathy",
+      "image": "/Bhagawathy.jpg",
+      "items": [
+        { "name": "Kadina Payasam", "price": "₹200" },
+        { "name": "Ghee Payasam", "price": "₹150" },
+        { "name": "Koottu Payasam", "price": "₹150" },
+        { "name": "Milk Payasam", "price": "₹100" },
+        { "name": "Ghee Lamp", "price": "₹20" },
+        { "name": "Oil Lamp", "price": "₹10" },
+        { "name": "Vilakku Mala", "price": "₹20" },
+        { "name": "Thrimadhuram (Banana)", "price": "₹50" },
+        { "name": "Coconut Thrimadhuram", "price": "₹100" },
+        { "name": "Thalicharthal", "price": "₹10" },
+        { "name": "Pattucharthal", "price": "₹10" },
+        { "name": "Lighting Vilakku", "price": "₹10" },
+        { "name": "Deepasthambham Lighting", "price": "₹500" },
+        { "name": "Sahasranama Archana", "price": "₹30" },
+        { "name": "Malar Para", "price": "₹300" }
+      ]
+    },
+    {
+      "title": "Ganapathy",
+      "image": "/img2.png",
+      "items": [
+        { "name": "Ganapathi Homam", "price": "₹100" },
+        { "name": "Koottu Ganapathi Homam", "price": "₹150" },
+        { "name": "Ghee Lamp", "price": "₹20" },
+        { "name": "Oil Lamp", "price": "₹10" },
+        { "name": "Otta Appam", "price": "₹200" },
+        { "name": "Appam Moodal", "price": "₹2000" },
+        { "name": "Deepasthambham Lighting", "price": "₹500" }
+      ]
+    },
+    {
+      "title": "Pushpanjali",
+      "image": "/Bhagawathy.jpg",
+      "items": [
+        { "name": "Pushpanjali", "price": "₹10" },
+        { "name": "Bhagyasooktha Pushpanjali", "price": "₹20" },
+        { "name": "Samvadasooktham", "price": "₹20" },
+        { "name": "Aikamatra Sooktham", "price": "₹20" },
+        { "name": "Vidya Sooktham", "price": "₹20" }
+      ]
+    },
+    {
+      "title": "Ayyappan",
+      "image": "/ayappan.jpg",
+      "small": true,
+      "items": [{ "name": "Vella Nivedyam (Saturday)", "price": "₹30" }]
+    },
+    {
+      "title": "Bhoothathan",
+      "image": "/Bhagawathy.jpg",
+      "small": true,
+      "items": [{ "name": "Vella Nivedyam (Monday)", "price": "₹30" }]
+    },
+    {
+      "title": "Other Offerings",
+      "image": "/Bhagawathy.jpg",
+      "items": [
+        { "name": "Brahmarakshas", "price": "₹100" },
+        { "name": "Vehicle Pooja", "price": "₹100" },
+        { "name": "Vidyarambham", "price": "₹100" },
+        { "name": "Niramala", "price": "₹750" },
+        { "name": "Marriage", "price": "₹800" },
+        { "name": "Choroon", "price": "₹100" },
+        { "name": "Trikala Pooja", "price": "₹100" },
+        { "name": "Bhagavath Seva", "price": "₹100" },
+        { "name": "Kettunira", "price": "₹10" },
+        { "name": "Mangalya Pushpanjali", "price": "₹50" },
+        { "name": "One Day Pooja", "price": "₹750" }
+      ]
+    }
+  ],
+  "donation": {
+    "title": "Online Donation",
+    "text": "Scan the QR code below to make your donations online."
+  },
+  "notice": {
+    "title": "Notice",
+    "text": "For more details, please contact the temple office."
+  },
+
+  "pooja_timings_section": {
+    "title": "Pooja Timings",
+    "morning": "Morning",
+    "evening": "Evening",
+    "noticeTitle": "Note",
+    "noticeDesc": "Pooja timings may change on special occasions. Contact the temple office for more details.",
+    "footerText": "Amme Narayana Devi Narayana",
+    "morningPoojas": [
+      { "name": "Nada Opening", "time": "6:00 AM" },
+      { "name": "Usha Pooja", "time": "6:30 AM" },
+      { "name": "Ucha Pooja", "time": "9:00 AM" },
+      { "name": "Nada Closing", "time": "10:30 AM" }
+    ],
+    "eveningPoojas": [
+      { "name": "Nada Opening", "time": "6:00 PM" },
+      { "name": "Deeparadhana", "time": "6:30 PM" },
+      { "name": "Athazha Pooja", "time": "7:00 PM" },
+      { "name": "Nada Closing", "time": "8:30 PM" }
+    ]
+  },
+  "history_page": {
+    "hero": {
+      "title": "Pathaikkara Mana",
+      "subtitle": "The Repository of Valluvanad's History"
+    },
+    "story": {
+      "title": "History of Pathaikkara Mana",
+      "p1": "Pathaikkara Mana is a prominent household belonging to the Mezhatthol family, categorized among the elite 'Ashtagriha' Namboothiris. They are residents of Shukapuram village, belonging to the Vishwamitra Gotra and practitioners of the Rigveda.",
+      "p2": "The spiritual advisors (Othikkan) of the Pathaikkara family are from the Kizhakkekutthulli Mana, who are practitioners of the Thirunavaya Othu. The Pathaikkara family migrated to Perinthalmanna from a place called Korattikkara in Thrissur district approximately seven hundred years ago.",
+      "p3": "It is said that there is still a place named Pathaikkara in Korattikkara today. It is believed that the King of Valluvanad (Valluvakonathiri) was the one who brought them from there.",
+      "p4": "In the early days, there were four Pathaikkara families here: Kizhakkepathaikkara, Madathilpathaikkara, Naduvamthodipathaikkara, and Padinjarrepathaikkara. Today, only the Padinjarrepathaikkara family remains.",
+      "p5": "Brahmathathan Namboothirippadu and Subramanyan Namboothirippadu are the primary names in the lineage. Records suggest that in the past, members were adopted into the family from the Ittiyapparambathu / Perutha Mana."
+    },
+    "valluvanad": {
+      "title": "Valluvanad and Pathaikkara Mana",
+      "p1": "The Pathaikkara family leads the 'Ariyittu Vazhcha' (coronation ceremony) of the Valluvakonathiri, the King of Valluvanad. Similarly, their presence is mandatory for the coronation of other local rulers such as Kongad Nair, Mannur Nair, Verkkottu Panicker, Edathara Kaimal, and Kovilkattu Panicker.",
+      "p2": "Pathaikkara Mana Swaroopam is one of the 'Pathinettara Swaroopams' (eighteen and a half principalities) of Valluvanad, the first native kingdom of Kerala. They held significant administrative authority in Valluvanad.",
+      "p3": "The ancient 'Pathinettara Swaroopams' consisted of eighteen entities including Cherukara Pisharody, Appamkalathil Pisharody, and Elumpoolakkattu Achan, along with the 'half-principality' of Kundotti Thangal.",
+      "p4": "Of these, there were two Namboothiri principalities, one of which was the Pathaikkara Mana Swaroopam. During the royal era of Valluvanad, the Pathaikkara Mana held immense importance.",
+      "p5": "The Valluvakonathiri bestowed upon them the prestigious hereditary titles of 'Thuppan Pramatthan' and 'Pramatthan Thuppan'."
+    },
+    "deity": {
+      "title": "Thirumandhamkunnu Amma",
+      "p1": "The family deity (Paradevata) of the Pathaikkara family is Thirumandhamkunnu Amma, and their village deity is Shukapurathappan.",
+      "p2": "The Goddess Thirumandhamkunnu Amma is enshrined in the 'Thekkini' (southern wing) of the Mana, where daily rituals and poojas are performed.",
+      "p3": "There is a tradition that the Goddess was enshrined in the Thekkini of this Mana even before she was enshrined at Angadipuram. There is also a belief that the deity here is the elder sister of the Angadipuram Thirumandhamkunnu Amma.",
+      "p4": "Consequently, the women of this Mana are traditionally restricted from offering prayers at the Angadipuram Thirumandhamkunnu Temple.",
+      "p5": "As a result, the six-month-long 'Paattu' festival of Angadipuram begins at this Mana for the first month in front of the Goddess, followed by five months at Angadipuram. The festival starts at the Mana on the 1st of the Malayalam month Thulam.",
+      "p6": "The temple festivals of Valluvanad traditionally begin with the 'Thalappoli' at this Mana. They also hold the hereditary trusteeship (Ooranma) of nearly twenty temples across different parts of Valluvanad.",
+      "p7": "In 1570, when Kongad joined Valluvanad, the Valluvakonathiri prepared a residence near the Kongad temple and brought the Pathaikkara family there.",
+      "p8": "They resided in Kongad for a long period. It was the members of this Mana who conducted the 'Thandettam' rituals for the Kongad Valiya Nair.",
+      "p9": "If one examines the history of Valluvanad, this Mana holds a position of primary importance."
+    },
+    "architecture": {
+      "title": "Architecture of the Mana",
+      "p1": "The architectural complex seen today at Pathaikkara Mana is estimated to be over two hundred years old. The complex currently consists of a magnificent 'Pathayappura' (granary) and parts of the traditional 'Naalukettu'.",
+      "p2": "The giant Pathayappura, featuring large pillars, is a unique specialty. It has the capacity to store 12,000 'Para' of paddy.",
+      "p3": "The beauty of this Mana is defined by its large central courtyard (Nadumuttam), two ponds, a beautiful well, and the grand granary.",
+      "p4": "While there were once numerous architectural structures here, many have been lost to the passage of time.",
+      "p5": "Nevertheless, the glory of the name 'Pathaikkara' will remain as long as Valluvanad exists. The Pathaikkara Mana stands tall amidst lush green land."
+    },
+    "keepers": {
+      "p1": "Pathaikkara Mana is the repository of Valluvanad's history. The records preserved here and the individuals of this family have played a major role in imparting historical knowledge to many researchers.",
+      "p2": "There have been many elders here who were oceans of knowledge. Sree Thuppan Pramatthan Namboothirippadu (1911-1999), father of the current elder Vasu Mash, used to subscribe to the National Geographic Magazine here as early as 1931.",
+      "p3": "He also had a great passion for vintage cars. Remnants of that legacy can still be seen upon visiting the Mana.",
+      "p4": "Pramatthan Thuppan Namboothirippadu (1873-1919), grandfather of Vasu Mash, was a personality known for his leadership skills and the greatness of his wisdom.",
+      "p5": "The current head of the family, Sree Vasudevan Namboothirippadu, is a retired teacher from Parli School. A profound Sanskrit scholar, he has read the Vyasa Mahabharata (in Sanskrit) eight times over.",
+      "p6": "Vasu Mash is essentially a living dictionary of Valluvanad's history—a true ocean of knowledge. It is his insights that many historians have recorded in their books."
+    }
+  },
+  "contact_section": {
+    "contactTitle": "Contact",
+    "placeholders": {
+      "name": " Name",
+      "mobile": "Mobile No",
+      "email": " Email",
+      "message": "Write Message"
+    },
+    "button": {
+      "submit": "SEND",
+      "sending": "Sending..."
+    },
+    "status": {
+      "success": "✅ Your message has been sent successfully!",
+      "error": "❌ Failed to send message. Please try again."
+    }
+  },
+  "committee": {
+    "title": "Temple Committee Members",
+    "members": [
+      { "name": "Suresh", "role": "President" },
+      { "name": "Pradeep", "role": "Vice President" },
+      { "name": "Vasu", "role": "Member" },
+      { "name": "Sivadasan", "role": "Member" },
+      { "name": "Vinod", "role": "Member" }
+    ]
+  },
+  "home": {
+    "hero_title": "Pathaikkara Mana",
+    "sub_heading": "Cultural Excellence Evoking Historical Memories",
+    "main_title": "Pathaikkara Mana",
+    "para1": "The Thalappoli at Pathaikkara Mana is a traditional heritage ritual that marks the formal beginning of the festival series in the Valluvanad region. This ceremony, which has continued through generations, holds a crucial position in the cultural history of Valluvanad. There is an ancient belief that the festival season in Valluvanad commences with the Thalappoli starting on the first of Thulam.",
+    "para2": "Daily pujas are offered to Thirumandhamkunnuilamma, who is consecrated in the 'Thekkini' (southern block) of Pathaikkara Mana. It is believed that worship began here even before the goddess was consecrated at Angadipuram. Based on the concept of being the elder sister of Thirumandhamkunnuilamma, the first month of the six-month-long 'Paattu' held at Angadipuram is observed before the Goddess at Pathaikkara Mana, followed by the remaining five months at Angadipuram.",
+    "para3": "Nevertheless, the glory of the name Pathaikkara will remain as long as Valluvanad exists. Situated in a lush green landscape, Pathaikkara Mana stands as a guardian of both history and culture.",
+    "button": "Read More"
+  }
+}
