@@ -44,7 +44,7 @@ export const Footer = () => {
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <FaWhatsapp className="text-green-500 shrink-0" />
                 <a href="https://wa.me/917306327251" target="_blank" rel="noopener noreferrer" className="hover:text-green-400 transition">
-                  +91 73063 27251
+                  WhatsApp
                 </a>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
