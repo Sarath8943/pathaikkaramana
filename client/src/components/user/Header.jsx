@@ -71,7 +71,7 @@ export const Header = () => {
               />
             </div>
 
-            <span className="font-bold text-[11px] xs:text-xs sm:text-sm md:text-lg leading-tight max-w-30 xs:max-w-[150px] sm:max-w-none">
+            <span className="font-bold text-[14px] xs:text-[16px] sm:text-[18px:text-[22px] whitespace-nowrap text-white">
               {t("temple_name")}
             </span>
           </Link>
