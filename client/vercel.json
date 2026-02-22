@@ -6,8 +6,3 @@
     }
   ]
 }
-git add .
-
-git commit -m "Move vercel.json to root"
-
-git push origin main
