@@ -16,13 +16,18 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
 
+// CORS സെറ്റിംഗ്‌സ് അപ്‌ഡേറ്റ് ചെയ്തു
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://pathaikkaramana.vercel.app"],
+    origin: [
+      "http://localhost:5173",
+      "https://pathaikkaramana.vercel.app",
+      "https://pathaikkaramana-bd45uph8o-saraths-projects-cf86062d.vercel.app"
+    ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  }),
+  })
 );
 
 app.use(
