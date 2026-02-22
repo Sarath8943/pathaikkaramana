@@ -18,6 +18,7 @@ export const Home = () => {
   const [currentImage, setCurrentImage] = React.useState(0);
   const [currentArchImage, setCurrentArchImage] = React.useState(0);
 
+  // Hero Slider
   React.useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
@@ -25,6 +26,7 @@ export const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Architecture Slider
   React.useEffect(() => {
     const interval = setInterval(() => {
       setCurrentArchImage((prev) => (prev + 1) % architectureImages.length);
@@ -49,22 +51,28 @@ export const Home = () => {
 
   return (
     <div className="bg-gray-50 text-gray-900 w-full">
-      <div className="relative w-full min-h-screen overflow-hidden">
+      <div className="relative w-full h-[60vh] md:h-screen overflow-hidden">
         {images.map((src, index) => (
-          <motion.img
+          <motion.div
             key={index}
-            src={src}
-            alt="Temple Slide"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: index === currentImage ? 1 : 0 }}
             transition={{ duration: 1 }}
-          />
+          >
+            <img
+              src={src}
+              alt="Temple Slide"
+              className="w-full h-full object-cover"
+            />
+
+            <div className="absolute inset-0 bg-black/30" />
+          </motion.div>
         ))}
 
-        <div className="absolute inset-0 flex flex-col justify-end items-center text-center px-4 md:pb-24">
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
           <motion.h1
-            className="text-3xl sm:text-7xl font-extrabold text-white drop-shadow-2xl mb-6"
+            className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-white drop-shadow-2xl mb-6"
             style={{ textShadow: "3px 3px 6px rgba(0, 0, 0, 0.8)" }}
             initial="hidden"
             animate="visible"
@@ -131,6 +139,7 @@ export const Home = () => {
           </div>
         </div>
       </div>
+
       <GalleryFuter />
     </div>
   );
