@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import GalleryFuter from "../components/Futures/GalleryFuter";
 
 const images = [
-  "/pathikkara-manna.jpg",
+  "/pathikkara manna.jpg",
   "/pathaikkara.jpg",
   "/pathikkara1.jpg",
 ];
