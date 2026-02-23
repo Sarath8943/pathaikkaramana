@@ -18,7 +18,7 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-[max-content_1fr_1fr] gap-y-8 md:gap-x-16 items-start">
           <div className="flex items-center justify-center md:justify-start gap-3">
             <FaPrayingHands className="text-amber-400 text-3xl md:text-4xl shrink-0" />
-            <h2 className="font-bold text-white uppercase tracking-wide text-sm sm:text-base md:text-lg lg:text-2xl leading-tight break-words">
+            <h2 className="font-bold text-white uppercase tracking-wide text-sm sm:text-base md:text-lg lg:text-2xl leading-tight wrap-break-word">
               {t("temple_full_name")}
             </h2>
           </div>
@@ -59,7 +59,7 @@ export const Footer = () => {
                 </li>
                 <li className="flex items-start gap-3 text-left">
                   <FaMapMarkerAlt className="text-amber-400 text-xs mt-1 shrink-0" />
-                  <span className="leading-snug break-words">
+                  <span className="leading-snug wrap-break-word">
                     {t("temple_location")}
                   </span>
                 </li>
