@@ -41,50 +41,60 @@ export const GalleryAlt = () => {
         {t("gallery")}
       </h1>
 
-      {/* Loading Skeleton */}
       {loading && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className="aspect-square bg-gray-200 animate-pulse rounded-xl"
-            ></div>
+            <div key={i} className="aspect-square bg-gray-200 animate-pulse rounded-xl"></div>
           ))}
         </div>
       )}
 
-      {!loading && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {media.map((item) => (
-            <motion.div
-              key={item._id}
-              whileTap={{ scale: 0.95 }}
-              className="relative aspect-square rounded-xl overflow-hidden shadow-md cursor-pointer"
-              onClick={() => setPreview(item)}
-            >
-              {item.type === "image" ? (
-                <img
-                  src={item.url}
-                  loading="lazy"
-                  className="w-full h-full object-cover"
-                  alt="gallery"
-                />
-              ) : (
-                <>
-                  <video
-                    src={item.url}
-                    preload="metadata"
-                    className="w-full h-full object-cover"
-                  />
-                  <FaPlay className="absolute inset-0 m-auto text-white text-3xl opacity-80" />
-                </>
-              )}
-            </motion.div>
-          ))}
-        </div>
-      )}
+      {!loading &&
+        [...new Set(media.map((i) => i.year || "Archive"))]
+          .sort()
+          .reverse()
+          .map((year) => (
+            <div key={year} className="mb-10">
+              
+              
+              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
+                {year}
+              </h2>
 
-      {/* Preview Modal */}
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {media
+                  .filter((i) => (i.year || "Archive") === year)
+                  .map((item) => (
+                    <motion.div
+                      key={item._id}
+                      whileTap={{ scale: 0.95 }}
+                      className="relative aspect-square rounded-xl overflow-hidden shadow-md cursor-pointer"
+                      onClick={() => setPreview(item)}
+                    >
+                      {item.type === "image" ? (
+                        <img
+                          src={item.url}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                          alt="gallery"
+                        />
+                      ) : (
+                        <>
+                          <video
+                            src={item.url}
+                            preload="metadata"
+                            className="w-full h-full object-cover"
+                          />
+                          <FaPlay className="absolute inset-0 m-auto text-white text-3xl opacity-80" />
+                        </>
+                      )}
+                    </motion.div>
+                  ))}
+              </div>
+            </div>
+          ))}
+
       <AnimatePresence>
         {preview && (
           <motion.div
