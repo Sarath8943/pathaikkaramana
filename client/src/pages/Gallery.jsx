@@ -9,20 +9,14 @@ export const GalleryAlt = () => {
   const [media, setMedia] = useState([]);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMedia = async () => {
-      setLoading(true);
-      setError(null);
       try {
         const res = await axiosInstance.get("/api/media");
-        const mediaData = Array.isArray(res.data) ? res.data : [];
-        setMedia(mediaData);
+        setMedia(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
-        console.error("Error fetching media:", err);
-        setError("Failed to load gallery.");
-        setMedia([]);
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -32,114 +26,102 @@ export const GalleryAlt = () => {
 
   const handleDownload = async (url) => {
     if (!url) return;
-    try {
-      const response = await axiosInstance.get(url, { responseType: "blob" });
-      const blob = response.data;
-      const blobUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = url.split("/").pop() || "download";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (err) {
-      console.error("Download failed:", err);
-      alert("Failed to download file.");
-    }
+    const response = await axiosInstance.get(url, { responseType: "blob" });
+    const blobUrl = window.URL.createObjectURL(response.data);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = url.split("/").pop();
+    link.click();
+    window.URL.revokeObjectURL(blobUrl);
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-black px-6 py-10 space-y-12">
-      <h1 className="text-3xl font-serif text-orange-700">{t("gallery")}</h1>
+    <div className="min-h-screen bg-slate-50 px-4 py-8">
+      <h1 className="text-2xl font-semibold text-orange-700 mb-6">
+        {t("gallery")}
+      </h1>
 
+      {/* Loading Skeleton */}
       {loading && (
-        <div className="flex flex-col items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-700"></div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="aspect-square bg-gray-200 animate-pulse rounded-xl"
+            ></div>
+          ))}
         </div>
       )}
 
-      {!loading && !error && (
-        <>
-          {[...new Set(media.map((i) => i.year || "Archive"))]
-            .sort()
-            .reverse()
-            .map((year) => (
-              <div key={year} className="space-y-4">
-                <h2 className="text-sm text-gray-600 uppercase tracking-widest">
-                  {year}
-                </h2>
-                <div className="flex gap-6 overflow-x-auto pb-4">
-                  {media
-                    .filter((i) => (i.year || "Archive") === year)
-                    .map((item) => (
-                      <motion.div
-                        key={item._id}
-                        whileHover={{ scale: 1.05 }}
-                        className="min-w-65 h-90 rounded-2xl overflow-hidden relative cursor-pointer bg-gray-100 shadow-lg"
-                        onClick={() => setPreview(item)}
-                      >
-                        {item.type === "image" ? (
-                          <img
-                            src={item.url}
-                            className="w-full h-full object-cover"
-                            alt="Gallery item"
-                          />
-                        ) : (
-                          <>
-                            <video
-                              src={item.url}
-                              className="w-full h-full object-cover opacity-80"
-                            />
-                            <FaPlay className="absolute inset-0 m-auto text-4xl opacity-70 text-white" />
-                          </>
-                        )}
-                      </motion.div>
-                    ))}
-                </div>
-              </div>
-            ))}
-        </>
+      {!loading && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {media.map((item) => (
+            <motion.div
+              key={item._id}
+              whileTap={{ scale: 0.95 }}
+              className="relative aspect-square rounded-xl overflow-hidden shadow-md cursor-pointer"
+              onClick={() => setPreview(item)}
+            >
+              {item.type === "image" ? (
+                <img
+                  src={item.url}
+                  loading="lazy"
+                  className="w-full h-full object-cover"
+                  alt="gallery"
+                />
+              ) : (
+                <>
+                  <video
+                    src={item.url}
+                    preload="metadata"
+                    className="w-full h-full object-cover"
+                  />
+                  <FaPlay className="absolute inset-0 m-auto text-white text-3xl opacity-80" />
+                </>
+              )}
+            </motion.div>
+          ))}
+        </div>
       )}
 
+      {/* Preview Modal */}
       <AnimatePresence>
         {preview && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/90 z-100 flex flex-col"
+            className="fixed inset-0 bg-black/95 z-50 flex flex-col"
           >
-            <div className="flex justify-between items-center px-6 py-4 text-white">
-              <h3 className="truncate">{preview.title || "Media Preview"}</h3>
-              <div className="flex gap-4 items-center">
-                <button
-                  onClick={() => handleDownload(preview.url)}
-                  className="flex items-center gap-2 px-4 py-2 text-white rounded-full text-xs font-bold hover:bg-white/20"
-                >
-                  <FaDownload /> Download
-                </button>
-                <button
-                  onClick={() => setPreview(null)}
-                  className="hover:bg-white/20 p-2 rounded-full"
-                >
-                  <FaTimes size={22} />
-                </button>
-              </div>
+            <div className="flex justify-between items-center p-4 text-white">
+              <button
+                onClick={() => setPreview(null)}
+                className="p-2 rounded-full hover:bg-white/20"
+              >
+                <FaTimes size={20} />
+              </button>
+
+              <button
+                onClick={() => handleDownload(preview.url)}
+                className="flex items-center gap-2 text-xs bg-white/10 px-3 py-2 rounded-full"
+              >
+                <FaDownload /> Download
+              </button>
             </div>
-            <div className="flex-1 flex items-center justify-center p-6 bg-black">
+
+            <div className="flex-1 flex items-center justify-center p-4">
               {preview.type === "image" ? (
                 <img
                   src={preview.url}
-                  className="w-full h-full object-contain"
-                  alt="Preview"
+                  className="max-h-full max-w-full object-contain"
+                  alt="preview"
                 />
               ) : (
                 <video
                   src={preview.url}
                   controls
                   autoPlay
-                  className="w-full h-full object-contain"
+                  className="max-h-full max-w-full object-contain"
                 />
               )}
             </div>
