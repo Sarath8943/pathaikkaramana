@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import GalleryFuter from "../components/Futures/GalleryFuter";
 
-const images = ["/pathikkara manna.jpg", "/pathaikkara.jpg", "/pathikkara1.jpg"];
+const images = ["/pathikkara-manna.jpg", "/pathaikkara.jpg", "/pathikkara1.jpg"];
 const architectureImages = ["/pathikkara1.jpg", "/pathaikkara.jpg"];
 
 export const Home = () => {
@@ -13,23 +13,27 @@ export const Home = () => {
   const [currentImage, setCurrentImage] = React.useState(0);
   const [currentArchImage, setCurrentArchImage] = React.useState(0);
 
-  // Sliders
+  // Hero Slider
   React.useEffect(() => {
-    const interval = setInterval(() => setCurrentImage((p) => (p + 1) % images.length), 4000);
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
+  // Architecture Slider
   React.useEffect(() => {
-    const interval = setInterval(() => setCurrentArchImage((p) => (p + 1) % architectureImages.length), 4000);
+    const interval = setInterval(() => {
+      setCurrentArchImage((prev) => (prev + 1) % architectureImages.length);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    // ഇവിടെ ശ്രദ്ധിക്കുക: overflow-x-hidden എന്നത് വശങ്ങളിലെ ബ്ലാങ്ക് സ്പേസ് ഒഴിവാക്കാൻ നിർബന്ധമാണ്
-    <div className="bg-gray-50 text-gray-900 w-full overflow-x-hidden">
+    <div className="w-screen min-h-screen overflow-x-hidden bg-gray-50 text-gray-900">
       
-      {/* Hero Section */}
-      <div className="relative w-full h-[60vh] md:h-screen">
+      {/* ================= HERO SECTION ================= */}
+      <section className="relative w-full h-[60vh] md:h-screen overflow-hidden">
         {images.map((src, index) => (
           <motion.div
             key={index}
@@ -38,50 +42,62 @@ export const Home = () => {
             animate={{ opacity: index === currentImage ? 1 : 0 }}
             transition={{ duration: 1 }}
           >
-            <img src={src} className="w-full h-full object-cover" alt="Temple" />
-            <div className="absolute inset-0 bg-black/30" />
+            <img
+              src={src}
+              alt="Temple"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/40" />
           </motion.div>
         ))}
 
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-2">
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
           <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-white drop-shadow-2xl">
             {t("home.hero_title")}
           </h1>
         </div>
-      </div>
+      </section>
 
-      {/* Main Content Section */}
-      <div className="bg-gray-100 w-full py-12">
-        {/* max-w-7xl ന് പുറത്ത് px-4 കൊടുക്കുന്നത് വഴി സ്ക്രീന്റെ അറ്റത്ത് ഒട്ടിക്കിടക്കും */}
+      {/* ================= MAIN CONTENT ================= */}
+      <section className="w-full py-12 bg-gray-100">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             
-            <div className="relative w-full h-72 md:h-105 rounded-xl shadow-2xl overflow-hidden">
+            {/* Image Slider */}
+            <div className="relative w-full h-72 md:h-[420px] rounded-xl shadow-2xl overflow-hidden">
               {architectureImages.map((img, index) => (
                 <motion.img
                   key={index}
                   src={img}
                   className="absolute inset-0 w-full h-full object-cover"
                   animate={{ opacity: index === currentArchImage ? 1 : 0 }}
+                  transition={{ duration: 1 }}
                 />
               ))}
             </div>
 
-            <div className="text-gray-700 space-y-4">
-              <h1 className="text-2xl md:text-4xl font-bold text-yellow-700 border-b-2 border-yellow-700 pb-2">
+            {/* Text Section */}
+            <div className="text-gray-700 space-y-5">
+              <h2 className="text-2xl md:text-4xl font-bold text-yellow-700 border-b-2 border-yellow-700 pb-2">
                 {t("home.main_title")}
-              </h1>
-              <p className="leading-relaxed">{t("home.para1")}</p>
+              </h2>
+
+              <p className="leading-relaxed text-base md:text-lg">
+                {t("home.para1")}
+              </p>
+
               <button
                 onClick={() => navigate("/history")}
-                className="bg-yellow-700 text-white px-8 py-3 rounded-lg w-full md:w-auto"
+                className="bg-yellow-700 hover:bg-yellow-800 transition text-white px-8 py-3 rounded-lg w-full md:w-auto"
               >
                 {t("home.button")}
               </button>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* ================= GALLERY FOOTER ================= */}
       <GalleryFuter />
     </div>
   );
