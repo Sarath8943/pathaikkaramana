@@ -16,9 +16,9 @@ export const Footer = () => {
     <footer className="bg-gray-900 text-gray-300 py-10 w-full border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-[max-content_1fr_1fr] gap-y-8 md:gap-x-16 items-start">
-          <div className="flex items-center justify-center md:justify-start gap-3">
-            <FaPrayingHands className="text-amber-400 text-3xl md:text-4xl shrink-0" />
-            <h2 className="font-bold text-white uppercase tracking-wide text-sm sm:text-base md:text-lg lg:text-2xl leading-tight wrap-break-word">
+          <div className="flex items-center justify-center md:justify-start gap-2 w-full overflow-hidden">
+            <FaPrayingHands className="text-amber-400 text-2xl sm:text-3xl shrink-0" />
+            <h2 className="font-bold text-white uppercase tracking-wide text-xs sm:text-sm md:text-lg lg:text-2xl whitespace-nowrap overflow-hidden text-ellipsis">
               {t("temple_full_name")}
             </h2>
           </div>
