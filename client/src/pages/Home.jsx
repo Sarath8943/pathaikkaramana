@@ -13,7 +13,7 @@ export const Home = () => {
   const [currentImage, setCurrentImage] = React.useState(0);
   const [currentArchImage, setCurrentArchImage] = React.useState(0);
 
-  // Hero Slider
+ 
   React.useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
@@ -21,7 +21,7 @@ export const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Architecture Slider
+ 
   React.useEffect(() => {
     const interval = setInterval(() => {
       setCurrentArchImage((prev) => (prev + 1) % architectureImages.length);
@@ -32,7 +32,7 @@ export const Home = () => {
   return (
     <div className="w-screen min-h-screen overflow-x-hidden bg-gray-50 text-gray-900">
       
-      {/* ================= HERO SECTION ================= */}
+     
       <section className="relative w-full h-[60vh] md:h-screen overflow-hidden">
         {images.map((src, index) => (
           <motion.div
@@ -58,13 +58,12 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* ================= MAIN CONTENT ================= */}
+      
       <section className="w-full py-12 bg-gray-100">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             
-            {/* Image Slider */}
-            <div className="relative w-full h-72 md:h-[420px] rounded-xl shadow-2xl overflow-hidden">
+            <div className="relative w-full h-72 md:h-105 rounded-xl shadow-2xl overflow-hidden">
               {architectureImages.map((img, index) => (
                 <motion.img
                   key={index}
@@ -76,7 +75,7 @@ export const Home = () => {
               ))}
             </div>
 
-            {/* Text Section */}
+           
             <div className="text-gray-700 space-y-5">
               <h2 className="text-2xl md:text-4xl font-bold text-yellow-700 border-b-2 border-yellow-700 pb-2">
                 {t("home.main_title")}
@@ -97,7 +96,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* ================= GALLERY FOOTER ================= */}
+      
       <GalleryFuter />
     </div>
   );
