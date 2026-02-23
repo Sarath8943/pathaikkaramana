@@ -15,16 +15,13 @@ export const Footer = () => {
   return (
     <footer className="bg-gray-900 text-gray-300 py-10 w-full border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-
         <div className="grid grid-cols-1 md:grid-cols-[max-content_1fr_1fr] gap-y-8 md:gap-x-16 items-start">
-
-          <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-2 sm:gap-3 text-center sm:text-left">
+          <div className="flex items-center justify-center md:justify-start gap-3">
             <FaPrayingHands className="text-amber-400 text-3xl md:text-4xl shrink-0" />
             <h2 className="font-bold text-white uppercase tracking-wide text-sm sm:text-base md:text-lg lg:text-2xl leading-tight break-words">
               {t("temple_full_name")}
             </h2>
           </div>
-
           <div className="flex flex-col items-center md:items-start w-full">
             <div className="w-fit">
               <h3 className="text-md font-semibold text-amber-400 mb-4 border-b border-amber-400/20 pb-2 text-center md:text-left uppercase tracking-wider">
@@ -33,7 +30,10 @@ export const Footer = () => {
               <ul className="space-y-4 text-sm">
                 <li className="flex items-center gap-3">
                   <FaPhoneAlt className="text-amber-400 text-xs shrink-0" />
-                  <a href="tel:+917306327251" className="hover:text-amber-400 transition">
+                  <a
+                    href="tel:+917306327251"
+                    className="hover:text-amber-400 transition"
+                  >
                     +91 73063 27251
                   </a>
                 </li>
@@ -95,16 +95,15 @@ export const Footer = () => {
               </div>
             </div>
           </div>
-
         </div>
 
         {/* Bottom Copyright */}
         <div className="text-center border-t border-gray-800 mt-12 pt-8">
           <p className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-[0.2em] leading-relaxed">
-            © {new Date().getFullYear()} {t("temple_full_name")} | {t("all_rights_reserved")}
+            © {new Date().getFullYear()} {t("temple_full_name")} |{" "}
+            {t("all_rights_reserved")}
           </p>
         </div>
-
       </div>
     </footer>
   );
