@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import axiosInstance from "../components/utils/axiosInstance";
 import { FaPlay, FaTimes, FaDownload } from "react-icons/fa";
@@ -6,12 +6,12 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export const GalleryAlt = () => {
   const { t } = useTranslation();
-
   const [media, setMedia] = useState([]);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  // useEffect കോൾ മുകളിൽ ഉള്ളത് പോലെ തന്നെ നിലനിർത്തുക
+  React.useEffect(() => {
     fetchMedia();
   }, []);
 
@@ -38,27 +38,19 @@ export const GalleryAlt = () => {
   }, [media]);
 
   const handleDownload = (url) => {
+    // സുരക്ഷിതമായി ഡൗൺലോഡ് ചെയ്യാൻ anchor tag ഉപയോഗിക്കുന്നു
     const link = document.createElement("a");
     link.href = url;
-    link.download = "";
+    link.setAttribute("download", "");
+    link.setAttribute("target", "_blank");
     document.body.appendChild(link);
     link.click();
     link.remove();
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-8">
-      <h1 className="text-2xl font-semibold text-orange-700 mb-6">
-        {t("gallery")}
-      </h1>
+      <h1 className="text-2xl font-semibold text-orange-700 mb-6">{t("gallery")}</h1>
 
       {groupedMedia.map(([year, items]) => (
         <div key={year} className="mb-10">
@@ -70,8 +62,9 @@ export const GalleryAlt = () => {
             {items.map((item) => (
               <motion.div
                 key={item._id}
-                whileTap={{ scale: 0.95 }}
-                className="relative aspect-square rounded-xl overflow-hidden shadow-md cursor-pointer bg-gray-100"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="relative aspect-square rounded-xl overflow-hidden shadow-sm bg-gray-200 cursor-pointer"
                 onClick={() => setPreview(item)}
               >
                 {item.type === "image" ? (
@@ -79,12 +72,17 @@ export const GalleryAlt = () => {
                     src={item.thumbnail || item.optimizedUrl}
                     loading="lazy"
                     decoding="async"
+                    alt="Gallery item"
                     className="w-full h-full object-cover"
-                    alt=""
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 200px"
                   />
                 ) : (
-                  <div className="w-full h-full bg-black flex items-center justify-center">
-                    <FaPlay className="text-white text-3xl opacity-80" />
+                  <div className="w-full h-full bg-slate-800 flex items-center justify-center relative">
+                   
+                    {item.thumbnail && (
+                      <img src={item.thumbnail} className="w-full h-full object-cover opacity-60" alt="" />
+                    )}
+                    <FaPlay className="text-white text-3xl absolute" />
                   </div>
                 )}
               </motion.div>
@@ -93,46 +91,28 @@ export const GalleryAlt = () => {
         </div>
       ))}
 
+    
       <AnimatePresence>
         {preview && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black z-50 flex flex-col"
+            className="fixed inset-0 bg-black/90 z-50 flex flex-col"
           >
-            <div className="flex justify-between items-center p-4 text-white">
-              <button
-                onClick={() => setPreview(null)}
-                className="p-2 rounded-full hover:bg-white/20"
-              >
-                <FaTimes size={20} />
+            <div className="flex justify-between p-4">
+              <button onClick={() => setPreview(null)} className="text-white p-2">
+                <FaTimes size={24} />
               </button>
-
-              <button
-                onClick={() => handleDownload(preview.url)}
-                className="flex items-center gap-2 text-xs bg-white/10 px-3 py-2 rounded-full hover:bg-white/20"
-              >
+              <button onClick={() => handleDownload(preview.url)} className="text-white flex items-center gap-2">
                 <FaDownload /> Download
               </button>
             </div>
-
-            <div className="flex-1 flex items-center justify-center bg-black">
+            <div className="flex-1 flex items-center justify-center p-2">
               {preview.type === "image" ? (
-                <img
-                  src={preview.url}
-                  className="w-full h-full object-contain"
-                  alt=""
-                />
+                <img src={preview.url} className="max-h-full max-w-full object-contain" alt="" />
               ) : (
-                <video
-                  src={preview.url}
-                  controls
-                  autoPlay
-                  playsInline
-                  preload="metadata"
-                  className="w-full h-full object-contain"
-                />
+                <video src={preview.url} controls autoPlay className="max-h-full max-w-full" />
               )}
             </div>
           </motion.div>
