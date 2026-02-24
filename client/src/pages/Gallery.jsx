@@ -10,20 +10,16 @@ export const GalleryAlt = () => {
   const [media, setMedia] = useState([]);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetchMedia(page);
-  }, [page]);
+    fetchMedia();
+  }, []);
 
-  const fetchMedia = async (pageNumber) => {
+  const fetchMedia = async () => {
     try {
       setLoading(true);
-      const res = await axiosInstance.get(
-        `/api/media?page=${pageNumber}&limit=20`
-      );
-
-      setMedia((prev) => [...prev, ...res.data]);
+      const res = await axiosInstance.get(`/api/media?limit=50`);
+      setMedia(res.data);
     } catch (err) {
       console.error(err);
     } finally {
@@ -31,7 +27,6 @@ export const GalleryAlt = () => {
     }
   };
 
-  // Group by year
   const groupedMedia = useMemo(() => {
     const groups = {};
     media.forEach((item) => {
@@ -44,12 +39,20 @@ export const GalleryAlt = () => {
 
   const handleDownload = (url) => {
     const link = document.createElement("a");
-    link.href = url; // original url
+    link.href = url;
     link.download = "";
     document.body.appendChild(link);
     link.click();
     link.remove();
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-8">
@@ -57,7 +60,6 @@ export const GalleryAlt = () => {
         {t("gallery")}
       </h1>
 
-      {/* Gallery */}
       {groupedMedia.map(([year, items]) => (
         <div key={year} className="mb-10">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
@@ -74,7 +76,7 @@ export const GalleryAlt = () => {
               >
                 {item.type === "image" ? (
                   <img
-                    src={item.thumbnail || item.optimizedUrl || item.url}
+                    src={item.thumbnail || item.optimizedUrl}
                     loading="lazy"
                     decoding="async"
                     className="w-full h-full object-cover"
@@ -91,17 +93,6 @@ export const GalleryAlt = () => {
         </div>
       ))}
 
-      {/* Load More Button */}
-      <div className="flex justify-center mt-6">
-        <button
-          onClick={() => setPage((prev) => prev + 1)}
-          className="px-6 py-2 bg-orange-600 text-white rounded-full"
-        >
-          Load More
-        </button>
-      </div>
-
-      {/* Preview Modal */}
       <AnimatePresence>
         {preview && (
           <motion.div
@@ -129,17 +120,17 @@ export const GalleryAlt = () => {
             <div className="flex-1 flex items-center justify-center bg-black">
               {preview.type === "image" ? (
                 <img
-                  src={preview.optimizedUrl || preview.url}
-                  alt=""
+                  src={preview.url}
                   className="w-full h-full object-contain"
+                  alt=""
                 />
               ) : (
                 <video
-                  key={preview.url}
                   src={preview.url}
                   controls
                   autoPlay
                   playsInline
+                  preload="metadata"
                   className="w-full h-full object-contain"
                 />
               )}
@@ -147,7 +138,6 @@ export const GalleryAlt = () => {
           </motion.div>
         )}
       </AnimatePresence>
-
     </div>
   );
 };
