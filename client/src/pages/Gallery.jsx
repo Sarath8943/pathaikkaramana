@@ -148,9 +148,6 @@ export const GalleryAlt = () => {
         )}
       </AnimatePresence>
 
-      {loading && (
-        <div className="text-center mt-4 text-gray-500">Loading...</div>
-      )}
     </div>
   );
 };
