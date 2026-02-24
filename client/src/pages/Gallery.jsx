@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import axiosInstance from "../components/utils/axiosInstance";
-import { FaPlay, FaTimes, FaDownload } from "react-icons/fa";
+import { FaTimes, FaDownload } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const GalleryAlt = () => {
@@ -17,18 +17,16 @@ export const GalleryAlt = () => {
   const fetchMedia = async () => {
     try {
       setLoading(true);
-      const res = await axiosInstance.get("/api/media?limit=30");
+      const res = await axiosInstance.get("/api/media?limit=20");
 
-      console.log("API Response:", res.data);
+      const data = Array.isArray(res.data)
+        ? res.data
+        : res.data?.data || [];
 
-      // Handle different possible API formats safely
-      if (Array.isArray(res.data)) {
-        setMedia(res.data);
-      } else if (Array.isArray(res.data?.data)) {
-        setMedia(res.data.data);
-      } else {
-        setMedia([]);
-      }
+      // 🔥 ONLY IMAGES (videos removed completely)
+      const onlyImages = data.filter((item) => item.type === "image");
+
+      setMedia(onlyImages);
     } catch (err) {
       console.error("Media fetch error:", err);
       setMedia([]);
@@ -38,8 +36,6 @@ export const GalleryAlt = () => {
   };
 
   const groupedMedia = useMemo(() => {
-    if (!Array.isArray(media)) return [];
-
     const groups = {};
     media.forEach((item) => {
       const year = item?.year || "Archive";
@@ -50,7 +46,6 @@ export const GalleryAlt = () => {
     return Object.entries(groups).sort((a, b) => {
       const yearA = Number(a[0]);
       const yearB = Number(b[0]);
-
       if (isNaN(yearA) || isNaN(yearB)) return 0;
       return yearB - yearA;
     });
@@ -75,12 +70,6 @@ export const GalleryAlt = () => {
         {t("gallery")}
       </h1>
 
-      {groupedMedia.length === 0 && (
-        <div className="text-center text-gray-500">
-          No media available
-        </div>
-      )}
-
       {groupedMedia.map(([year, items]) => (
         <div key={year} className="mb-10">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
@@ -93,31 +82,15 @@ export const GalleryAlt = () => {
                 key={item._id}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="relative aspect-square rounded-xl overflow-hidden bg-gray-200 cursor-pointer"
+                className="aspect-square rounded-xl overflow-hidden bg-gray-200 cursor-pointer"
                 onClick={() => setPreview(item)}
               >
-                {item.type === "image" ? (
-                  <img
-                    src={item.thumbnail || item.optimizedUrl || item.url}
-                    loading="lazy"
-                    alt="Gallery item"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      if (item.url) e.target.src = item.url;
-                    }}
-                  />
-                ) : (
-                  <div className="w-full h-full bg-black flex items-center justify-center relative">
-                    {item.thumbnail && (
-                      <img
-                        src={item.thumbnail}
-                        className="w-full h-full object-cover opacity-60"
-                        alt=""
-                      />
-                    )}
-                    <FaPlay className="text-white text-3xl absolute" />
-                  </div>
-                )}
+                <img
+                  src={item.thumbnail || item.optimizedUrl || item.url}
+                  loading="lazy"
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
               </motion.div>
             ))}
           </div>
@@ -145,21 +118,11 @@ export const GalleryAlt = () => {
             </div>
 
             <div className="flex-1 flex items-center justify-center p-2">
-              {preview.type === "image" ? (
-                <img
-                  src={preview.url}
-                  className="max-h-full max-w-full object-contain"
-                  alt=""
-                />
-              ) : (
-                <video
-                  src={preview.url}
-                  controls
-                  autoPlay
-                  preload="metadata"
-                  className="max-h-full max-w-full"
-                />
-              )}
+              <img
+                src={preview.url}
+                className="max-h-full max-w-full object-contain"
+                alt=""
+              />
             </div>
           </motion.div>
         )}
