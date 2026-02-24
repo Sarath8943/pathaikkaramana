@@ -17,26 +17,47 @@ export const GalleryAlt = () => {
   const fetchMedia = async () => {
     try {
       setLoading(true);
-      const res = await axiosInstance.get(`/api/media?limit=30`);
-      setMedia(res.data || []);
+      const res = await axiosInstance.get("/api/media?limit=30");
+
+      console.log("API Response:", res.data);
+
+      // Handle different possible API formats safely
+      if (Array.isArray(res.data)) {
+        setMedia(res.data);
+      } else if (Array.isArray(res.data?.data)) {
+        setMedia(res.data.data);
+      } else {
+        setMedia([]);
+      }
     } catch (err) {
       console.error("Media fetch error:", err);
+      setMedia([]);
     } finally {
       setLoading(false);
     }
   };
 
   const groupedMedia = useMemo(() => {
+    if (!Array.isArray(media)) return [];
+
     const groups = {};
     media.forEach((item) => {
-      const year = item.year || "Archive";
+      const year = item?.year || "Archive";
       if (!groups[year]) groups[year] = [];
       groups[year].push(item);
     });
-    return Object.entries(groups).sort((a, b) => b[0] - a[0]);
+
+    return Object.entries(groups).sort((a, b) => {
+      const yearA = Number(a[0]);
+      const yearB = Number(b[0]);
+
+      if (isNaN(yearA) || isNaN(yearB)) return 0;
+      return yearB - yearA;
+    });
   }, [media]);
 
   const handleDownload = (url) => {
+    if (!url) return;
     window.open(url, "_blank");
   };
 
@@ -53,6 +74,12 @@ export const GalleryAlt = () => {
       <h1 className="text-2xl font-semibold text-orange-700 mb-6">
         {t("gallery")}
       </h1>
+
+      {groupedMedia.length === 0 && (
+        <div className="text-center text-gray-500">
+          No media available
+        </div>
+      )}
 
       {groupedMedia.map(([year, items]) => (
         <div key={year} className="mb-10">
@@ -76,7 +103,7 @@ export const GalleryAlt = () => {
                     alt="Gallery item"
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.target.src = item.url;
+                      if (item.url) e.target.src = item.url;
                     }}
                   />
                 ) : (
