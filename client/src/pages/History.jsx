@@ -21,7 +21,7 @@ export const History = () => {
   return (
     <div className="bg-gray-50 text-gray-900">
       {/* Hero Section */}
-      <div className="relative w-full h-screen min-h-[500px] overflow-hidden">
+      <div className="relative w-full h-screen min-h-125 overflow-hidden">
         {images.map((src, index) => (
           <img
             key={index}
