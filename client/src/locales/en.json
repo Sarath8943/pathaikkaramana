@@ -110,14 +110,14 @@
     "morningPoojas": [
       { "name": "Nada Opening", "time": "6:00 AM" },
       { "name": "Usha Pooja", "time": "6:30 AM" },
-      { "name": "Ucha Pooja", "time": "9:00 AM" },
-      { "name": "Nada Closing", "time": "10:30 AM" }
+      { "name": "Ucha Pooja", "time": "8:00 AM" },
+      { "name": "Nada Closing", "time": "9:00 AM" }
     ],
     "eveningPoojas": [
-      { "name": "Nada Opening", "time": "6:00 PM" },
+      { "name": "Nada Opening", "time": "5:00 PM" },
       { "name": "Deeparadhana", "time": "6:30 PM" },
-      { "name": "Athazha Pooja", "time": "7:00 PM" },
-      { "name": "Nada Closing", "time": "8:30 PM" }
+      { "name": "Athazha Pooja", "time": "6:45 PM" },
+      { "name": "Nada Closing", "time": "7:00 PM" }
     ]
   },
   "history_page": {

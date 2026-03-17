@@ -110,14 +110,14 @@
     "morningPoojas": [
       { "name": "നട തുറക്കൽ", "time": "6:00 AM" },
       { "name": "ഉഷ പൂജ", "time": "6:30 AM" },
-      { "name": "ഉച്ച പൂജ", "time": "9:00 AM" },
-      { "name": "നട അടക്കൽ", "time": "10:30 AM" }
+      { "name": "ഉച്ച പൂജ", "time": "8:00 AM" },
+      { "name": "നട അടക്കൽ", "time": "9:00 AM" }
     ],
     "eveningPoojas": [
-      { "name": "നട തുറക്കൽ", "time": "6:00 PM" },
+      { "name": "നട തുറക്കൽ", "time": "5:00 PM" },
       { "name": "ദീപാരാധന", "time": "6:30 PM" },
-      { "name": "അത്താഴപൂജ", "time": "7:00 PM" },
-      { "name": "നട അടക്കൽ", "time": "8:30 PM" }
+      { "name": "അത്താഴപൂജ", "time": "6:45 PM" },
+      { "name": "നട അടക്കൽ", "time": "7:00 PM" }
     ]
   },
   "history_page": {

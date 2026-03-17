@@ -1,7 +1,7 @@
 const Admin = require("../models/adminModels");
 const jwt = require("jsonwebtoken");
 const { generateToken } = require("../utils/token");
-
+const cloudinary = require("../config/cloudinary");
 
 exports.adminSignup = async (req, res) => {
   try {
@@ -38,34 +38,35 @@ exports.adminSignup = async (req, res) => {
       profileImage,
     });
 
-
     const token = generateToken(admin._id);
 
     res.cookie("adminToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(201).json({
       message: "Signup successful",
+      token: token,
+      admin: {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email,
+      },
     });
   } catch (error) {
     console.error("ADMIN SIGNUP ERROR 👉", error);
-
     if (error.code === 11000) {
       return res.status(400).json({
         message: "Email or phone already exists",
       });
     }
-
     res.status(500).json({
       message: "Internal server error",
     });
   }
 };
-
 
 exports.adminLogin = async (req, res) => {
   try {
@@ -78,7 +79,6 @@ exports.adminLogin = async (req, res) => {
     }
 
     const query = email ? { email } : { phone };
-
     const admin = await Admin.findOne(query);
 
     if (!admin) {
@@ -101,12 +101,18 @@ exports.adminLogin = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
       message: "Admin login successful",
+      token: token,
+      admin: {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email,
+      },
     });
+    // -------------------------
   } catch (error) {
     console.error("ADMIN LOGIN ERROR 👉", error);
     res.status(500).json({
@@ -114,7 +120,6 @@ exports.adminLogin = async (req, res) => {
     });
   }
 };
-
 
 exports.adminLogout = (req, res) => {
   try {
@@ -134,7 +139,6 @@ exports.adminLogout = (req, res) => {
     });
   }
 };
-
 
 exports.changeAdminPassword = async (req, res) => {
   try {
@@ -182,3 +186,77 @@ exports.changeAdminPassword = async (req, res) => {
   }
 };
 
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, email, phone } = req.body;
+
+    const adminId = req.admin._id;
+
+    let admin = await Admin.findById(adminId);
+    if (!admin) return res.status(404).json({ message: "Admin not found" });
+
+    const updateData = {
+      name: name || admin.name,
+      email: email || admin.email,
+      phone: phone || admin.phone,
+    };
+
+    if (req.file) {
+      if (admin.profileImagePublicId) {
+        await cloudinary.uploader.destroy(admin.profileImagePublicId);
+      }
+      updateData.profileImage = req.file.path;
+      updateData.profileImagePublicId = req.file.filename;
+    }
+
+    const updatedAdmin = await Admin.findByIdAndUpdate(
+      adminId,
+      { $set: updateData },
+      { new: true, runValidators: true },
+    ).select("-password");
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      admin: updatedAdmin,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ message: "Email or Phone already exists" });
+    }
+    console.error("Update Profile Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+exports.getAdminProfile = async (req, res) => {
+  try {
+    const admin = req.admin;
+
+    if (!admin) {
+      return res.status(404).json({
+        success: false,
+        message: "Admin not found.",
+      });
+    }
+
+    const adminData = {
+      _id: admin._id,
+      name: admin.name,
+      email: admin.email,
+      phone: admin.phone,
+      profileImage: admin.profileImage,
+    };
+
+    res.status(200).json({
+      success: true,
+      admin: adminData, // ഫ്രണ്ട്-എൻഡിലേക്ക് സുരക്ഷിതമായ ഡാറ്റ മാത്രം അയക്കുന്നു
+    });
+  } catch (error) {
+    console.error("GET ADMIN PROFILE ERROR 👉", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
