@@ -1,154 +1,117 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import axiosInstance from "../components/utils/axiosInstance";
-import { FaPlay, FaTimes, FaDownload } from "react-icons/fa";
+// Path കൃത്യമാണെന്ന് ഉറപ്പുവരുത്തുക
+import axiosInstance from "../components/utils/axiosInstance"; 
+import { FaPlay, FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const GalleryAlt = () => {
-  const { t } = useTranslation();
   const [media, setMedia] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [preview, setPreview] = useState(null);
 
   useEffect(() => {
+    const fetchMedia = async () => {
+      try {
+        setLoading(true);
+        const res = await axiosInstance.get("/api/media");
+        
+        // Console-ൽ ഡാറ്റ വരുന്നുണ്ടോ എന്ന് ചെക്ക് ചെയ്യുക
+        console.log("Gallery Data:", res.data);
+
+        // ഡാറ്റ അറേ ആണോ എന്ന് ഉറപ്പുവരുത്തുന്നു
+        const fetchedData = Array.isArray(res.data) 
+          ? res.data 
+          : (res.data.media || res.data.data || []);
+          
+        setMedia(fetchedData);
+      } catch (err) {
+        console.error("Gallery Fetch Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchMedia();
   }, []);
 
-  const fetchMedia = async () => {
-    try {
-      const res = await axiosInstance.get("/api/media?limit=20");
-
-      const data = Array.isArray(res.data)
-        ? res.data
-        : res.data?.data || [];
-
-      setMedia(data);
-    } catch (err) {
-      console.error("Media fetch error:", err);
-      setMedia([]);
-    }
-  };
-
   const groupedMedia = useMemo(() => {
     const groups = {};
+    if (!media.length) return [];
 
     media.forEach((item) => {
-      const year = item?.year || "Archive";
+      const year = item.year || "Archive";
       if (!groups[year]) groups[year] = [];
       groups[year].push(item);
     });
-
-    return Object.entries(groups).sort((a, b) => {
-      const yearA = Number(a[0]);
-      const yearB = Number(b[0]);
-      if (isNaN(yearA) || isNaN(yearB)) return 0;
-      return yearB - yearA;
-    });
+    // വർഷം പുതിയത് ആദ്യം വരാൻ (Descending Order)
+    return Object.entries(groups).sort((a, b) => b[0] - a[0]);
   }, [media]);
 
-  const handleDownload = (url) => {
-    if (!url) return;
-    window.open(url, "_blank");
-  };
+  if (loading) return <div className="text-center p-20 text-amber-800 font-bold">Loading Gallery...</div>;
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8">
-      <h1 className="text-2xl font-semibold text-orange-700 mb-6">
-        {t("gallery")}
-      </h1>
-
-      {groupedMedia.map(([year, items]) => (
-        <div key={year} className="mb-10">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
-            {year}
-          </h2>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {items.map((item) => (
-              <motion.div
-                key={item._id}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="relative aspect-square rounded-xl overflow-hidden bg-gray-200 cursor-pointer"
-                onClick={() => setPreview(item)}
-              >
-                {item.type === "image" ? (
-                  <img
-                    src={item.thumbnail || item.optimizedUrl || item.url}
-                    loading="lazy"
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="relative w-full h-full overflow-hidden">
-                    
-                    {/* If thumbnail exists */}
-                    {item.thumbnail ? (
-                      <img
-                        src={item.thumbnail}
-                        className="w-full h-full object-cover"
-                        alt=""
-                      />
-                    ) : (
-                      /* Fallback to video first frame */
-                      <video
-                        src={item.url}
-                        muted
-                        preload="metadata"
-                        playsInline
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-
-                    {/* Play icon overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                      <FaPlay className="text-white text-4xl" />
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </div>
+    <div className="min-h-screen bg-amber-50/20 p-6 md:p-12">
+      {groupedMedia.length === 0 ? (
+        <div className="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-amber-200">
+           <p className="text-amber-800 font-bold italic">No media found in the archive.</p>
         </div>
-      ))}
+      ) : (
+        groupedMedia.map(([year, items]) => (
+          <div key={year} className="mb-16">
+            <h2 className="text-2xl font-black text-amber-900 mb-6 flex items-center gap-3">
+              <span className="w-2 h-8 bg-amber-600 rounded-full"></span>
+              {year}
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+              {items.map((item) => (
+                <motion.div 
+                  key={item._id} 
+                  whileHover={{ scale: 1.05 }}
+                  onClick={() => setPreview(item)}
+                  className="cursor-pointer bg-white rounded-[2rem] shadow-md overflow-hidden aspect-square relative border-4 border-white transition-all hover:shadow-xl"
+                >
+                  {item.type === "image" ? (
+                    <img src={item.url} className="w-full h-full object-cover" alt="" loading="lazy" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-amber-950 relative">
+                       <FaPlay className="text-amber-100/50 text-4xl z-10" />
+                       {item.thumbnail && (
+                         <img src={item.thumbnail} className="absolute inset-0 w-full h-full object-cover opacity-40" alt="" />
+                       )}
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        ))
+      )}
 
+      {/* Preview Modal - Simplified & Full View */}
       <AnimatePresence>
         {preview && (
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black z-50 flex flex-col"
+            className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 md:p-10 backdrop-blur-sm"
           >
-            <div className="flex justify-between p-4 text-white z-10">
-              <button onClick={() => setPreview(null)}>
-                <FaTimes size={24} />
-              </button>
-
-              <button
-                onClick={() => handleDownload(preview.url)}
-                className="flex items-center gap-2"
-              >
-                <FaDownload /> Download
-              </button>
-            </div>
-
-            <div className="flex-1 flex items-center justify-center">
+            <button 
+              onClick={() => setPreview(null)} 
+              className="absolute top-8 right-8 text-white/50 hover:text-white text-4xl transition-colors"
+            >
+              <FaTimes />
+            </button>
+            
+            <div className="w-full h-full flex items-center justify-center">
               {preview.type === "image" ? (
-                <img
-                  src={preview.url}
-                  alt=""
-                  className="w-screen h-screen object-contain"
-                />
+                <img src={preview.url} className="max-h-full max-w-full object-contain rounded-lg shadow-2xl" alt="Preview" />
               ) : (
-                <video
-                  src={preview.url}
-                  controls
-                  autoPlay
-                  playsInline
-                  preload="metadata"
-                  className="w-screen h-screen object-contain"
-                />
+                <video src={preview.url} controls autoPlay className="max-h-full max-w-full rounded-lg shadow-2xl" />
               )}
+            </div>
+            
+            <div className="absolute bottom-10 bg-white/10 px-6 py-2 rounded-full backdrop-blur-md">
+                <p className="text-white font-bold tracking-widest uppercase text-xs italic">{preview.year}</p>
             </div>
           </motion.div>
         )}

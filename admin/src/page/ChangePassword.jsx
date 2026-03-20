@@ -82,17 +82,16 @@ const ChangePassword = () => {
     <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
       <div className="max-w-xl w-full bg-white rounded-[2.5rem] shadow-2xl border border-amber-100 overflow-hidden">
         <div className="bg-amber-800 p-8 text-white relative">
-          {/* Back Button - z-50 ഉം type="button" ഉം ശ്രദ്ധിക്കുക */}
           <button
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              navigate("/login");
+              navigate("/dashboard/profile");
             }}
             className="absolute top-6 right-6 text-amber-200 hover:text-white flex items-center gap-1 text-sm font-bold transition-all z-50 cursor-pointer bg-amber-900/30 py-2 px-3 rounded-lg border border-amber-700/50 hover:bg-amber-700"
           >
             <ArrowLeft size={18} />
-            <span>Back to Login</span>
+            <span>Back to profile</span>
           </button>
 
           <div className="relative z-10">
