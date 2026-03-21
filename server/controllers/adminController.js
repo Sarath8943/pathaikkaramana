@@ -72,71 +72,78 @@ exports.adminLogin = async (req, res) => {
   try {
     const { email, phone, password } = req.body;
 
+    // 1. ഫീൽഡുകൾ ഉണ്ടോ എന്ന് നോക്കുന്നു
     if ((!email && !phone) || !password) {
       return res.status(400).json({
-        message: "Phone or email and password required",
+        success: false,
+        message: "Phone/Email and password are required",
       });
     }
 
+    // 2. അഡ്മിനെ കണ്ടെത്തുന്നു
     const query = email ? { email } : { phone };
     const admin = await Admin.findOne(query);
 
     if (!admin) {
       return res.status(401).json({
+        success: false,
         message: "Invalid credentials",
       });
     }
 
+    // 3. പാസ്‌വേഡ് ചെക്ക് ചെയ്യുന്നു
     const isMatch = await admin.comparePassword(password);
-
     if (!isMatch) {
       return res.status(401).json({
+        success: false,
         message: "Invalid credentials",
       });
     }
 
+    // 4. ടോക്കൺ ഉണ്ടാക്കുന്നു (id തന്നെയാണോ എന്ന് ഉറപ്പാക്കുക)
     const token = generateToken(admin._id);
 
+    // 5. കുക്കി സെറ്റ് ചെയ്യുന്നു (Cross-domain support-ന് വേണ്ടി)
     res.cookie("adminToken", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: true, // Render-ൽ ഇത് നിർബന്ധമാണ് (HTTPS)
+      sameSite: "none", // Vercel-ൽ നിന്ന് ആക്സസ് ചെയ്യാൻ ഇത് 'none' ആയിരിക്കണം
+      maxAge: 24 * 60 * 60 * 1000, // 1 ദിവസം
     });
 
+    // 6. ഫൈനൽ റെസ്‌പോൺസ്
     res.status(200).json({
+      success: true,
       message: "Admin login successful",
-      token: token,
+      token: token, // ഫ്രണ്ട് എൻഡിൽ sessionStorage-ൽ സേവ് ചെയ്യാൻ
       admin: {
         id: admin._id,
         name: admin.name,
         email: admin.email,
       },
     });
-    // -------------------------
   } catch (error) {
     console.error("ADMIN LOGIN ERROR 👉", error);
-    res.status(500).json({
-      message: "Server error",
-    });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
 exports.adminLogout = (req, res) => {
   try {
+    // കുക്കി ക്ലിയർ ചെയ്യുന്നു
     res.clearCookie("adminToken", {
       httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      secure: true,
     });
 
     res.status(200).json({
+      success: true,
       message: "Admin logout successful",
     });
   } catch (error) {
     console.error("ADMIN LOGOUT ERROR 👉", error);
-    res.status(500).json({
-      message: "Server error",
-    });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
