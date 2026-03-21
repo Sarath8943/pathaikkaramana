@@ -1,14 +1,14 @@
 const express = require("express");
 const path = require("path");
+require("dotenv").config({
+  path: path.resolve(__dirname, ".env"),
+  quiet: true,
+});
 const connectDB = require("./config/db");
 const adminRoutes = require("./routes/adminRoutes");
 const mediaRoutes = require("./routes/mediaRoutes");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-require("dotenv").config({
-  path: path.resolve(__dirname, ".env"),
-  quiet: true,
-});
 
 const app = express();
 const port = process.env.PORT || 5000;
