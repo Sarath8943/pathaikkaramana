@@ -1,14 +1,8 @@
 import axios from "axios";
 
-const isLocalhost =
-  typeof window !== "undefined" &&
-  (window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1");
-
-// Vercel-ൽ വർക്ക് ആകാൻ Render URL ഇവിടെ നൽകുന്നു
-const apiBaseURL = isLocalhost 
-  ? "http://localhost:5000/api" 
-  : "https://pathaikkaramana.onrender.com/api"; 
+const apiBaseURL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://pathaikkaramana.onrender.com/api";
 
 const axiosInstance = axios.create({
   baseURL: apiBaseURL,
@@ -23,9 +17,7 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 export default axiosInstance;
