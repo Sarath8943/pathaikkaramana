@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Full width fix */
+
 html, body, #root {
   margin: 0;
   padding: 0;
