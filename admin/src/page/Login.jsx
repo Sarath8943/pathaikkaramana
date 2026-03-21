@@ -9,7 +9,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // പേജ് ലോഡ് ചെയ്യുമ്പോൾ തന്നെ സെഷൻ ഉണ്ടോ എന്ന് നോക്കുന്നു
   useEffect(() => {
     const existingToken = sessionStorage.getItem("token");
     if (existingToken) {
