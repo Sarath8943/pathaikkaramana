@@ -1,20 +1,20 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "../page/Login";
-import Signup from "../page/Signup"; // 'S' Capital ആക്കി
+import Signup from "../page/Signup";
 import Dashboard from "../page/Dashboard";
-import Gallery from "../page/Gallery"; // 'G' Capital ആക്കി
+import Gallery from "../page/Gallery";
 import AdminProfile from "../page/AdminProfile";
-import ChangePassword from "../page/ChangePassword"; 
+import ChangePassword from "../page/ChangePassword";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/login" replace />, 
+    element: <Navigate to="/login" replace />,
   },
   {
     path: "/login",
-    element: <Login />,
+    element:<Login/>,
   },
   {
     path: "/signup",
@@ -28,26 +28,26 @@ export const router = createBrowserRouter([
     path: "/dashboard",
     element: (
       <ProtectedRoute>
-        <Dashboard /> 
+        <Dashboard />
       </ProtectedRoute>
     ),
     children: [
       {
         path: "gallery",
-        element: <Gallery />
+        element: <Gallery />,
       },
       {
-        path: "profile", 
-        element: <AdminProfile/>
+        path: "profile",
+        element: <AdminProfile />,
       },
       {
         path: "change-password",
-        element: <ChangePassword />
+        element: <ChangePassword />,
       },
       {
         index: true,
-        element: <Navigate to="gallery" replace /> 
-      }
+        element: <Navigate to="gallery" replace />,
+      },
     ],
   },
 ]);

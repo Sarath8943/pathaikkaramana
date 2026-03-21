@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Mail, Lock, ShieldCheck, LogIn, AlertCircle } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
 
-const Login = () => {
+export const Login = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
