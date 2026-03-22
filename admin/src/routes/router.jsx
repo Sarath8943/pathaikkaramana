@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "../page/AdminLogin";
-import Signup from "../page/Signup";
+// import Signup from "../page/Signup";
 import Dashboard from "../page/Dashboard";
 import Gallery from "../page/Gallery";
 import AdminProfile from "../page/AdminProfile";
@@ -16,10 +16,10 @@ export const router = createBrowserRouter([
     path: "/login",
     element:<Login/>,
   },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
+  // {
+  //   path: "/signup",
+  //   element: <Signup />,
+  // },
   {
     path: "/change-password",
     element: <ChangePassword />,

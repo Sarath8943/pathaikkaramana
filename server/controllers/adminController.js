@@ -130,7 +130,7 @@ exports.adminLogin = async (req, res) => {
 
 exports.adminLogout = (req, res) => {
   try {
-    // കുക്കി ക്ലിയർ ചെയ്യുന്നു
+    
     res.clearCookie("adminToken", {
       httpOnly: true,
       sameSite: "none",

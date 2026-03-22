@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Mail, Lock, ShieldCheck, LogIn, AlertCircle } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
 
@@ -8,6 +8,9 @@ export const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isOffline, setIsOffline] = useState(
+    typeof navigator !== "undefined" ? !navigator.onLine : false,
+  );
 
   useEffect(() => {
     const existingToken = sessionStorage.getItem("token");
@@ -16,12 +19,38 @@ export const Login = () => {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+      setError("");
+    };
+
+    const handleOffline = () => {
+      setIsOffline(true);
+      setError("No internet connection. Reconnect and try signing in again.");
+    };
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      setIsOffline(true);
+      setError("No internet connection. Reconnect and try signing in again.");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
@@ -35,6 +64,9 @@ export const Login = () => {
       navigate("/dashboard", { replace: true });
     } catch (error) {
       const errorMsg =
+        error.code === "ERR_NETWORK" || !error.response
+          ? "Unable to reach the server. Check your internet connection and try again."
+          :
         error.response?.data?.message ||
         "Invalid email or password. Please try again.";
       setError(errorMsg);
@@ -79,6 +111,13 @@ export const Login = () => {
               Please enter your admin credentials
             </p>
           </div>
+
+          {isOffline && (
+            <div className="mb-4 p-4 rounded-xl text-sm font-medium bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-2">
+              <AlertCircle size={18} />
+              You appear to be offline. The admin login needs an internet connection.
+            </div>
+          )}
 
           {error && (
             <div className="mb-6 p-4 rounded-xl text-sm font-medium bg-rose-50 text-rose-700 border border-rose-100 flex items-center gap-2">
@@ -125,7 +164,7 @@ export const Login = () => {
             <div className="space-y-3 pt-2">
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || isOffline}
                 className="w-full bg-amber-800 text-white py-4 rounded-2xl font-bold hover:bg-amber-900 transition-all shadow-xl active:scale-[0.97] disabled:bg-amber-800 flex items-center justify-center gap-2 group"
               >
                 {loading ? (

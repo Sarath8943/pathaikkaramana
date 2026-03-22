@@ -56,11 +56,12 @@ const ChangePassword = () => {
       });
 
       // 3. പാസ്‌വേഡ് മാറിക്കഴിഞ്ഞാൽ പഴയ ടോക്കൺ കളയുന്നത് നല്ലതാണ്
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("role");
 
       // 4. 2 സെക്കൻഡിന് ശേഷം ലോഗിൻ പേജിലേക്ക് വിടുന്നു
       setTimeout(() => {
-        navigate("/login");
+        navigate("/login", { replace: true });
       }, 2000);
     } catch (error) {
       const errorMsg =
