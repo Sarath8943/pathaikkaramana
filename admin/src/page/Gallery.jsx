@@ -68,7 +68,7 @@ const MediaGallery = () => {
     <div className="min-h-screen max-w-7xl mx-auto bg-amber-50/20 p-4 md:p-8 font-sans">
       <header className="mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
         <h1 className="text-4xl font-black uppercase italic tracking-tighter text-amber-950">
-          Media Manager
+          Gallery
         </h1>
         <div className="flex gap-4">
           <div className="min-w-[110px] rounded-3xl border-b-4 border-amber-800 bg-white p-4 text-center shadow-sm">

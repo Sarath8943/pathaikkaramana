@@ -14,7 +14,6 @@ export const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // പ്രൊഫൈൽ ഇമേജ് സ്റ്റേറ്റ്
   const [profileImage, setProfileImage] = useState(localStorage.getItem("profileImage") || "");
 
   useEffect(() => {
@@ -23,14 +22,13 @@ export const Dashboard = () => {
       navigate("/login", { replace: true });
     }
 
-    // പ്രൊഫൈൽ പേജിൽ ഫോട്ടോ മാറ്റുമ്പോൾ ഹെഡറിലും മാറാൻ ഈ ലിസണർ സഹായിക്കും
+    
     const handleStorageChange = () => {
       setProfileImage(localStorage.getItem("profileImage") || "");
     };
 
     window.addEventListener("storage", handleStorageChange);
     
-    // ആദ്യ തവണ ലോഡ് ചെയ്യുമ്പോൾ ബാക്ക് എൻഡിൽ നിന്ന് ഫോട്ടോ എടുക്കുന്നു
     const fetchHeaderImage = async () => {
       try {
         const res = await axiosInstance.get("/admin/profile");
@@ -50,7 +48,7 @@ export const Dashboard = () => {
 
   const handleLogout = () => {
     sessionStorage.clear();
-    localStorage.removeItem("profileImage"); // ലോഗൗട്ട് ചെയ്യുമ്പോൾ ഇമേജും കളയുന്നു
+    localStorage.removeItem("profileImage"); 
     navigate("/login", { replace: true });
   };
 
@@ -76,7 +74,7 @@ export const Dashboard = () => {
           </Link>
           <Link to="/dashboard/gallery" className={navLinkStyle("/dashboard/gallery")}>
             <GalleryIcon size={20} />
-            <span className="font-semibold uppercase text-xs tracking-wider">Gallery Manager</span>
+            <span className="font-semibold uppercase text-xs tracking-wider">Gallery </span>
           </Link>
         </nav>
 
