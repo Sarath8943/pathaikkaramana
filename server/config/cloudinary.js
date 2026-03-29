@@ -11,11 +11,15 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "admin_profiles", // Cloudinary-ൽ വരാനുള്ള ഫോൾഡർ പേര്
-    allowed_formats: ["jpg", "png", "jpeg"],
+    folder: "temple_gallery", 
+    resource_type: "auto", // 👈 ഇത് പ്രധാനമാണ്! എങ്കിലേ വീഡിയോ വർക്ക് ആകൂ.
+    allowed_formats: ["jpg", "png", "jpeg", "mp4", "mov"], // വീഡിയോ ഫോർമാറ്റുകളും ചേർത്തു
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit
+});
 
 module.exports = { cloudinary, upload };

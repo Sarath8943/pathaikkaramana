@@ -1,74 +1,65 @@
 const Media = require("../models/mediaModels");
-const cloudinary = require("cloudinary").v2;
+const { cloudinary } = require("../config/cloudinary");
+const fs = require("fs"); // അപ്‌ലോഡിന് ശേഷം ഫയൽ ഡിലീറ്റ് ചെയ്യാൻ
 
-require("dotenv").config();
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+// ഇമേജ്/വീഡിയോ വേരിയന്റുകൾ നിർമ്മിക്കാൻ
+const buildCloudinaryVariant = (secureUrl, width, isVideo) =>
+  secureUrl
+    .replace(
+      "/upload/",
+      `/upload/w_${width},q_auto,f_auto${isVideo ? ",so_0" : ""}/`,
+    )
+    .replace(/\.[^/.]+$/, isVideo ? ".jpg" : "");
 
 exports.uploadMedia = async (req, res) => {
   try {
     const { year } = req.body;
 
-    // പ്രധാനപ്പെട്ട ചെക്ക്: ഫയൽ വരുന്നുണ്ടോ എന്ന് നോക്കുക
     if (!req.file) {
-      return res
-        .status(400)
-        .json({ message: "No file uploaded. Check if the key is 'image'" });
+      return res.status(400).json({ message: "File not available." });
     }
 
-    if (!year) {
-      return res.status(400).json({ message: "Year is required" });
+    const parsedYear = Number.parseInt(year, 10);
+    if (Number.isNaN(parsedYear)) {
+      return res.status(400).json({ message: "Year must be a valid number." });
     }
 
-    const stream = cloudinary.uploader.upload_stream(
-      {
-        resource_type: "auto",
-        folder: "temple_media",
-      },
-      async (error, result) => {
-        if (error) {
-          console.error("Cloudinary Error:", error);
-          return res.status(500).json({ message: "Cloudinary Upload Failed" });
-        }
+    const isVideo = req.file.mimetype.startsWith("video/");
 
-        const isVideo = result.resource_type === "video";
+    // ✅ Cloudinary അപ്‌ലോഡ് (Disk Path ഉപയോഗിക്കുന്നു)
+    const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+      resource_type: "auto", // വീഡിയോ/ഇമേജ് തനിയെ തിരിച്ചറിയും
+      folder: "temple_media",
+      ...(isVideo ? { chunk_size: 6000000 } : {}) // വലിയ വീഡിയോകൾക്ക്
+    });
 
-        // ലളിതമായ URL ട്രാസ്‌ഫോർമേഷൻ
-        const transformBase = `/upload/w_800,q_auto,f_auto${isVideo ? ",so_0" : ""}/`;
-        const thumbBase = `/upload/w_400,q_auto,f_auto${isVideo ? ",so_0" : ""}/`;
+    // ✅ അപ്‌ലോഡ് കഴിഞ്ഞാൽ സെർവറിലെ ടെമ്പററി ഫയൽ ഡിലീറ്റ് ചെയ്യുക
+    if (fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
 
-        const optimizedUrl = result.secure_url
-          .replace("/upload/", transformBase)
-          .replace(/\.[^/.]+$/, isVideo ? ".jpg" : "");
+    const optimizedUrl = buildCloudinaryVariant(uploadResult.secure_url, 800, isVideo);
+    const thumbnailUrl = buildCloudinaryVariant(uploadResult.secure_url, 400, isVideo);
 
-        const thumbnailUrl = result.secure_url
-          .replace("/upload/", thumbBase)
-          .replace(/\.[^/.]+$/, isVideo ? ".jpg" : "");
+    const media = await Media.create({
+      url: uploadResult.secure_url,
+      optimizedUrl,
+      thumbnail: thumbnailUrl,
+      type: uploadResult.resource_type,
+      publicId: uploadResult.public_id,
+      year: parsedYear,
+    });
 
-        const media = await Media.create({
-          url: result.secure_url,
-          optimizedUrl: optimizedUrl,
-          thumbnail: thumbnailUrl,
-          type: result.resource_type,
-          publicId: result.public_id,
-          year: parseInt(year),
-        });
-
-        res.status(200).json(media);
-      },
-    );
-
-    stream.end(req.file.buffer);
+    res.status(200).json(media);
   } catch (error) {
-    console.error("Server Error:", error);
-    res.status(500).json({ message: "Server error" });
+    // എറർ വന്നാലും താൽക്കാലിക ഫയൽ ഡിലീറ്റ് ചെയ്യണം
+    if (req.file && req.file.path && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    console.error("Media upload error:", error);
+    res.status(500).json({ message: error.message || "Upload failed.." });
   }
 };
-
-// getMedia, deleteMedia എന്നിവ നിങ്ങൾ നൽകിയത് പോലെ തന്നെ തുടരാം...
 exports.getMedia = async (req, res) => {
   try {
     const media = await Media.find().sort({ createdAt: -1 });

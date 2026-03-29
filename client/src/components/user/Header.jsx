@@ -80,13 +80,13 @@ export const Header = () => {
             <ul className="flex items-center w-full max-w-5xl justify-between list-none m-0 p-0">
               {navItems.map((item, idx) => (
                 <li key={idx} className="flex-1 text-center">
-                  <a
-                    href={item.href}
+                  <Link
+                    to={item.href}
                     className="text-[13px] xl:text-[15px] font-bold hover:text-yellow-300 transition duration-300 whitespace-nowrap px-1 py-2 relative group inline-block"
                   >
                     {item.name}
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-300 transition-all group-hover:w-full"></span>
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -126,14 +126,14 @@ export const Header = () => {
       >
         <div className="flex flex-col p-4">
           {navItems.map((item, idx) => (
-            <a
+            <Link
               key={idx}
-              href={item.href}
+              to={item.href}
               onClick={() => setIsOpen(false)}
               className="py-3 px-4 hover:bg-yellow-800 rounded font-bold border-b border-yellow-800/50"
             >
               {item.name}
-            </a>
+            </Link>
           ))}
 
           <div className="flex gap-2 mt-4 md:hidden">

@@ -40,16 +40,16 @@ const MediaGallery = () => {
 
     try {
       setUploading(true);
-      await axiosInstance.post("/media/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await axiosInstance.post("/media/upload", formData);
       await fetchMedia();
       setFile(null);
       setYear("");
       e.target.reset();
     } catch (err) {
       console.error("Upload failed", err);
-      alert("Upload failed! Check backend logs.");
+      alert(
+        err.response?.data?.message || "Upload failed. Please try again.",
+      );
     } finally {
       setUploading(false);
     }
@@ -101,7 +101,7 @@ const MediaGallery = () => {
             </label>
             <input
               type="text"
-              placeholder="Year (e.g. 2024)"
+              placeholder="Year"
               value={year}
               onChange={(e) => setYear(e.target.value)}
               className="w-full rounded-2xl bg-amber-50/50 p-4 font-bold outline-none focus:border-amber-500"
@@ -114,6 +114,7 @@ const MediaGallery = () => {
             </label>
             <input
               type="file"
+              accept="image/*,video/*"
               onChange={(e) => setFile(e.target.files[0])}
               className="w-full rounded-2xl border-2 border-dashed border-amber-200 p-2.5 text-xs"
               required
@@ -123,7 +124,7 @@ const MediaGallery = () => {
             disabled={uploading}
             className={`w-full h-[58px] rounded-2xl py-4.5 font-black tracking-widest text-white ${
               uploading
-                ? "bg-amber-300 animate-pulse"
+                ? "bg-amber-700 animate-pulse"
                 : "bg-amber-900 hover:bg-amber-800"
             }`}
           >

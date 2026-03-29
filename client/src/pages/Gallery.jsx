@@ -2,10 +2,10 @@ import React, { useState, useMemo, useEffect } from "react";
 import axiosInstance from "../components/utils/axiosInstance"; 
 import { FaPlay, FaTimes, FaDownload } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTranslation } from "react-i18next"; // i18n import
+import { useTranslation } from "react-i18next";
 
 export const GalleryAlt = () => {
-  const { t } = useTranslation(); // translation hook
+  const { t } = useTranslation();
   const [media, setMedia] = useState([]);
   const [loading, setLoading] = useState(true);
   const [preview, setPreview] = useState(null);
@@ -39,7 +39,6 @@ export const GalleryAlt = () => {
     return Object.entries(groups).sort((a, b) => b[0] - a[0]);
   }, [media]);
 
-  // ഫയൽ ഡൗൺലോഡ് ചെയ്യാനുള്ള ഫങ്ക്ഷൻ
   const handleDownload = async (url, filename) => {
     try {
       const response = await fetch(url);
@@ -57,11 +56,10 @@ export const GalleryAlt = () => {
     }
   };
 
-  if (loading) return <div className="text-center p-20 text-amber-800 font-bold">Loading...</div>;
+  if (loading) return <div className="text-center p-20 text-amber-800 font-bold tracking-widest animate-pulse uppercase">Loading Gallery...</div>;
 
   return (
     <div className="min-h-screen bg-amber-50/20 p-6 md:p-12 font-sans">
-      {/* i18n Heading */}
       <h1 className="text-4xl font-black text-amber-950 mb-12 tracking-tighter italic uppercase">
         {t("gallery")}
       </h1>
@@ -81,9 +79,9 @@ export const GalleryAlt = () => {
               {items.map((item) => (
                 <motion.div 
                   key={item._id} 
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.05 }}
                   onClick={() => setPreview(item)}
-                  className="cursor-pointer bg-white rounded-[2rem] shadow-md overflow-hidden aspect-square relative border-4 border-white transition-all hover:shadow-xl"
+                  className="group cursor-pointer bg-white rounded-[1.5rem] shadow-md overflow-hidden aspect-square relative border-4 border-white transition-all hover:shadow-2xl"
                 >
                   {item.type === "image" ? (
                     <img 
@@ -94,8 +92,23 @@ export const GalleryAlt = () => {
                       crossOrigin="anonymous"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-amber-950 relative">
-                       <FaPlay className="text-amber-100/40 text-4xl z-10" />
+                    <div className="w-full h-full relative bg-black">
+                      {/* ✅ വീഡിയോ പ്രിവ്യൂ: മൗസ് വെക്കുമ്പോൾ തനിയെ പ്ലേ ആകും */}
+                      <video 
+                        src={item.url} 
+                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                        muted
+                        loop
+                        playsInline
+                        onMouseOver={(e) => e.target.play()}
+                        onMouseOut={(e) => {
+                          e.target.pause();
+                          e.target.currentTime = 0; // നിർത്തുമ്പോൾ തുടക്കത്തിലേക്ക് പോകാൻ
+                        }}
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-transparent transition-all">
+                         <FaPlay className="text-white/80 text-3xl drop-shadow-lg group-hover:scale-125 transition-transform" />
+                      </div>
                     </div>
                   )}
                 </motion.div>
@@ -110,9 +123,8 @@ export const GalleryAlt = () => {
         {preview && (
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 backdrop-blur-md"
           >
-            {/* Top Bar Controls */}
             <div className="absolute top-6 right-6 flex items-center gap-6 z-[110]">
               <button 
                 onClick={(e) => {
@@ -132,13 +144,12 @@ export const GalleryAlt = () => {
               </button>
             </div>
 
-            {/* Main Content - No text underneath */}
             <div className="w-full h-full flex items-center justify-center" onClick={() => setPreview(null)}>
               {preview.type === "image" ? (
                 <motion.img 
                   initial={{ scale: 0.9 }} animate={{ scale: 1 }}
                   src={preview.url} 
-                  className="max-h-[90vh] max-w-full object-contain shadow-2xl" 
+                  className="max-h-[85vh] max-w-full object-contain shadow-2xl rounded-lg" 
                   alt="Full view" 
                 />
               ) : (
@@ -146,7 +157,8 @@ export const GalleryAlt = () => {
                   src={preview.url} 
                   controls 
                   autoPlay 
-                  className="max-h-[90vh] max-w-full shadow-2xl" 
+                  className="max-h-[85vh] max-w-[90vw] shadow-2xl rounded-lg" 
+                  crossOrigin="anonymous"
                 />
               )}
             </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const PHOTOS = [
   { id: 1, src: "/img3.jpg" },
@@ -8,8 +9,10 @@ const PHOTOS = [
 ];
 
 export const GalleryFuter = () => {
+  const navigate = useNavigate();
+
   const handleNavigation = () => {
-    window.location.href = "/gallery";
+    navigate("/gallery");
   };
 
   return (

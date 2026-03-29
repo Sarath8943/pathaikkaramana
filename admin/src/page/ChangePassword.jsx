@@ -205,7 +205,7 @@ const ChangePassword = () => {
               disabled={loading}
               className="w-full bg-amber-800 text-white py-4 rounded-2xl font-bold text-lg hover:bg-amber-900 transition-all active:scale-[0.98] disabled:bg-amber-200 shadow-xl shadow-amber-900/10 flex items-center justify-center gap-2"
             >
-              {loading ? "Processing..." : "Confirm Password Change"}
+              {loading ? "Processing..." : " Change Password"}
             </button>
           </div>
         </form>
