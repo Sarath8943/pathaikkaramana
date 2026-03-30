@@ -1,11 +1,11 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "../page/AdminLogin";
-// import Signup from "../page/Signup";
 import Dashboard from "../page/Dashboard";
-import Gallery from "../page/Gallery";
 import AdminProfile from "../page/AdminProfile";
 import ChangePassword from "../page/ChangePassword";
 import ProtectedRoute from "../components/ProtectedRoute";
+import Overview from "../page/Overview"; 
+import Gallery from "../page/gallery";
 
 export const router = createBrowserRouter([
   {
@@ -14,15 +14,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element:<Login/>,
-  },
-  // {
-  //   path: "/signup",
-  //   element: <Signup />,
-  // },
-  {
-    path: "/change-password",
-    element: <ChangePassword />,
+    element: <Login />,
   },
   {
     path: "/dashboard",
@@ -32,9 +24,14 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
+      // 2. ഇതാണ് ലോഗിൻ ചെയ്യുമ്പോൾ ആദ്യം കാണേണ്ട പേജ്
+      {
+        index: true,
+        element: <Overview />, 
+      },
       {
         path: "gallery",
-        element: <Gallery />,
+        element: <Gallery/>,
       },
       {
         path: "profile",
@@ -43,10 +40,6 @@ export const router = createBrowserRouter([
       {
         path: "change-password",
         element: <ChangePassword />,
-      },
-      {
-        index: true,
-        element: <Navigate to="gallery" replace />,
       },
     ],
   },

@@ -168,7 +168,7 @@ export const Login = () => {
                 className="w-full bg-amber-800 text-white py-4 rounded-2xl font-bold hover:bg-amber-900 transition-all shadow-xl active:scale-[0.97] disabled:bg-amber-800 flex items-center justify-center gap-2 group"
               >
                 {loading ? (
-                  "Verifying..."
+                  "Sign In..."
                 ) : (
                   <>
                     Sign In

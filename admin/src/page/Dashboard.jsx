@@ -68,7 +68,7 @@ export const Dashboard = () => {
         </div>
 
         <nav className="space-y-2 flex-1">
-          <Link to="/dashboard" className={navLinkStyle("/dashboard")}>
+          <Link to="/dashboard" className={navLinkStyle("/Overview")}>
             <LayoutDashboard size={20} />
             <span className="font-semibold uppercase text-xs tracking-wider">Overview</span>
           </Link>

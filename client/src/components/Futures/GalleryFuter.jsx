@@ -17,8 +17,6 @@ export const GalleryFuter = () => {
 
   return (
     <div className="relative w-full min-h-screen bg-black overflow-hidden flex flex-col md:flex-row">
-
- 
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <h1 className="text-[25vw] md:text-[20vw] font-black text-white/5 uppercase tracking-tighter select-none">
           Explore
@@ -44,15 +42,12 @@ export const GalleryFuter = () => {
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out will-change-transform group-hover:scale-110"
           />
 
-          
           <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity duration-500" />
 
-          
           <div className="absolute bottom-0 left-0 w-full h-1 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
         </motion.div>
       ))}
 
-      
       <div className="absolute bottom-8 left-0 w-full md:left-auto md:right-8 md:w-auto z-20 px-6 flex justify-center">
         <button
           onClick={handleNavigation}

@@ -1,7 +1,7 @@
 const Admin = require("../models/adminModels");
 const jwt = require("jsonwebtoken");
 const { generateToken } = require("../utils/token");
-const cloudinary = require("../config/cloudinary");
+const { cloudinary } = require("../config/cloudinary");
 
 exports.adminSignup = async (req, res) => {
   try {

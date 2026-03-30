@@ -1,8 +1,6 @@
 const Media = require("../models/mediaModels");
 const { cloudinary } = require("../config/cloudinary");
-const fs = require("fs"); // അപ്‌ലോഡിന് ശേഷം ഫയൽ ഡിലീറ്റ് ചെയ്യാൻ
 
-// ഇമേജ്/വീഡിയോ വേരിയന്റുകൾ നിർമ്മിക്കാൻ
 const buildCloudinaryVariant = (secureUrl, width, isVideo) =>
   secureUrl
     .replace(
@@ -11,12 +9,63 @@ const buildCloudinaryVariant = (secureUrl, width, isVideo) =>
     )
     .replace(/\.[^/.]+$/, isVideo ? ".jpg" : "");
 
+const uploadBufferToCloudinary = (buffer, resourceType) =>
+  new Promise((resolve, reject) => {
+    const streamFactory =
+      resourceType === "video"
+        ? cloudinary.uploader.upload_chunked_stream
+        : cloudinary.uploader.upload_stream;
+
+    const stream = streamFactory.call(
+      cloudinary.uploader,
+      {
+        resource_type: resourceType,
+        folder: "temple_media",
+        ...(resourceType === "video" ? { chunk_size: 6 * 1024 * 1024 } : {}),
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        resolve(result);
+      },
+    );
+
+    stream.on("error", reject);
+    stream.end(buffer);
+  });
+
 exports.uploadMedia = async (req, res) => {
   try {
+    const {
+      CLOUDINARY_NAME,
+      CLOUDINARY_API_KEY,
+      CLOUDINARY_API_SECRET,
+    } = process.env;
     const { year } = req.body;
 
     if (!req.file) {
-      return res.status(400).json({ message: "File not available." });
+      return res.status(400).json({
+        message: "No file uploaded. Make sure the form field name is 'file'.",
+      });
+    }
+
+    if (!req.file.buffer || !req.file.mimetype) {
+      return res.status(400).json({
+        message: "Uploaded file data is invalid or incomplete.",
+      });
+    }
+
+    if (!CLOUDINARY_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
+      return res.status(500).json({
+        message: "Cloudinary configuration is missing on the server.",
+      });
+    }
+
+    if (!year) {
+      return res.status(400).json({ message: "Year is required." });
     }
 
     const parsedYear = Number.parseInt(year, 10);
@@ -24,22 +73,30 @@ exports.uploadMedia = async (req, res) => {
       return res.status(400).json({ message: "Year must be a valid number." });
     }
 
-    const isVideo = req.file.mimetype.startsWith("video/");
+    const resourceType = req.file.mimetype.startsWith("video/")
+      ? "video"
+      : "image";
 
-    // ✅ Cloudinary അപ്‌ലോഡ് (Disk Path ഉപയോഗിക്കുന്നു)
-    const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: "auto", // വീഡിയോ/ഇമേജ് തനിയെ തിരിച്ചറിയും
-      folder: "temple_media",
-      ...(isVideo ? { chunk_size: 6000000 } : {}) // വലിയ വീഡിയോകൾക്ക്
-    });
+    const uploadResult = await uploadBufferToCloudinary(
+      req.file.buffer,
+      resourceType,
+    );
 
-    // ✅ അപ്‌ലോഡ് കഴിഞ്ഞാൽ സെർവറിലെ ടെമ്പററി ഫയൽ ഡിലീറ്റ് ചെയ്യുക
-    if (fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
+    if (!uploadResult?.secure_url || !uploadResult?.public_id) {
+      throw new Error("Cloudinary upload did not return the expected file data.");
     }
 
-    const optimizedUrl = buildCloudinaryVariant(uploadResult.secure_url, 800, isVideo);
-    const thumbnailUrl = buildCloudinaryVariant(uploadResult.secure_url, 400, isVideo);
+    const isVideo = uploadResult.resource_type === "video";
+    const optimizedUrl = buildCloudinaryVariant(
+      uploadResult.secure_url,
+      800,
+      isVideo,
+    );
+    const thumbnailUrl = buildCloudinaryVariant(
+      uploadResult.secure_url,
+      400,
+      isVideo,
+    );
 
     const media = await Media.create({
       url: uploadResult.secure_url,
@@ -52,14 +109,13 @@ exports.uploadMedia = async (req, res) => {
 
     res.status(200).json(media);
   } catch (error) {
-    // എറർ വന്നാലും താൽക്കാലിക ഫയൽ ഡിലീറ്റ് ചെയ്യണം
-    if (req.file && req.file.path && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
     console.error("Media upload error:", error);
-    res.status(500).json({ message: error.message || "Upload failed.." });
+    res.status(500).json({
+      message: error.message || "Media upload failed on the server.",
+    });
   }
 };
+
 exports.getMedia = async (req, res) => {
   try {
     const media = await Media.find().sort({ createdAt: -1 });

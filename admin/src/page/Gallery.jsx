@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { FiEye, FiTrash2, FiVideo, FiX } from "react-icons/fi";
 
-const MediaGallery = () => {
+export const Gallery = () => {
   const [mediaList, setMediaList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [file, setFile] = useState(null);
@@ -28,6 +28,8 @@ const MediaGallery = () => {
   useEffect(() => {
     fetchMedia();
   }, []);
+
+  const getVideoPoster = (item) => item.thumbnail || item.optimizedUrl || "";
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -71,7 +73,7 @@ const MediaGallery = () => {
           Gallery
         </h1>
         <div className="flex gap-4">
-          <div className="min-w-[110px] rounded-3xl border-b-4 border-amber-800 bg-white p-4 text-center shadow-sm">
+          <div className="min-w-27.5 rounded-3xl border-b-4 border-amber-800 bg-white p-4 text-center shadow-sm">
             <p className="text-[10px] font-black uppercase text-amber-500">
               Photos
             </p>
@@ -79,7 +81,7 @@ const MediaGallery = () => {
               {mediaList.filter((item) => item.type === "image").length}
             </p>
           </div>
-          <div className="min-w-[110px] rounded-3xl border-b-4 border-amber-950 bg-white p-4 text-center shadow-sm">
+          <div className="min-w-27.5 rounded-3xl border-b-4 border-amber-950 bg-white p-4 text-center shadow-sm">
             <p className="text-[10px] font-black uppercase text-amber-500">
               Videos
             </p>
@@ -122,7 +124,7 @@ const MediaGallery = () => {
           </div>
           <button
             disabled={uploading}
-            className={`w-full h-[58px] rounded-2xl py-4.5 font-black tracking-widest text-white ${
+            className={`w-full h-14.5 rounded-2xl py-4.5 font-black tracking-widest text-white ${
               uploading
                 ? "bg-amber-700 animate-pulse"
                 : "bg-amber-900 hover:bg-amber-800"
@@ -146,8 +148,20 @@ const MediaGallery = () => {
                 alt=""
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-amber-950">
-                <FiVideo size={48} className="text-white/20" />
+              <div className="relative h-full w-full overflow-hidden bg-amber-950">
+                {getVideoPoster(item) ? (
+                  <img
+                    src={getVideoPoster(item)}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    alt=""
+                  />
+                ) : null}
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                  <FiVideo size={48} className="text-white/70" />
+                </div>
+                <div className="absolute right-3 bottom-3 rounded-full bg-black/60 px-3 py-1 text-[10px] font-black tracking-[0.2em] text-white">
+                  VIDEO
+                </div>
               </div>
             )}
             <div className="absolute top-4 left-4 rounded-2xl bg-white/90 px-3 py-1.5 text-[10px] font-black text-amber-900">
@@ -173,7 +187,7 @@ const MediaGallery = () => {
 
       {previewItem && (
         <div
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 p-4 backdrop-blur-md"
+          className="fixed inset-0 z-200 flex items-center justify-center bg-black/95 p-4 backdrop-blur-md"
           onClick={() => setPreviewItem(null)}
         >
           <button className="absolute top-8 right-8 text-white">
@@ -188,6 +202,7 @@ const MediaGallery = () => {
           ) : (
             <video
               src={previewItem.url}
+              poster={getVideoPoster(previewItem)}
               controls
               autoPlay
               className="max-h-full max-w-full"
@@ -199,4 +214,4 @@ const MediaGallery = () => {
   );
 };
 
-export default MediaGallery;
+export default Gallery;
