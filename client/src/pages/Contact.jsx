@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ContactFuter from "../components/Futures/ContactFuter";
 import emailjs from "emailjs-com";
@@ -6,8 +6,35 @@ import emailjs from "emailjs-com";
 export const Contact = () => {
   const { t } = useTranslation();
   const form = useRef();
+  const mapContainerRef = useRef(null);
   const [statusMessage, setStatusMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [mapShouldLoad, setMapShouldLoad] = useState(false);
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  const mapUrl =
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.32688086088!2d76.2238356!3d10.9757656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba7cb413d80630b%3A0xe212260281b3158c!2sPathaikkara%20Mana!5e0!3m2!1sen!2sin!4v1700000000000";
+
+  useEffect(() => {
+    const target = mapContainerRef.current;
+    if (!target || mapShouldLoad) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry?.isIntersecting) {
+          setMapShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "250px 0px" },
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [mapShouldLoad]);
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -35,17 +62,37 @@ export const Contact = () => {
   };
 
   return (
-    <section className="min-h-screen  bg-slate-50 py-12 px-4 font-sans flex flex-wrap justify-center items-start gap-8">
-      <div className="flex-1 min-w-80 max-w-170.5 p-2">
-        <iframe
-          title="Location Map"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.32688086088!2d76.2238356!3d10.9757656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba7cb413d80630b%3A0xe212260281b3158c!2sPathaikkara%20Mana!5e0!3m2!1sen!2sin!4v1700000000000"
-          className="w-full h-132 rounded-xl shadow-md border-0"
-          loading="lazy"
-        />
+    <section className="min-h-screen bg-slate-50 py-12 px-4 font-sans flex flex-wrap justify-center items-start gap-8">
+      <div className="w-full lg:flex-1 lg:min-w-[20rem] max-w-[42.625rem] p-2">
+        <div
+          ref={mapContainerRef}
+          className="relative w-full h-132 rounded-xl shadow-md overflow-hidden bg-amber-50"
+        >
+          {mapShouldLoad ? (
+            <>
+              <iframe
+                title="Location Map"
+                src={mapUrl}
+                className="w-full h-full border-0"
+                loading="lazy"
+                onLoad={() => setMapLoaded(true)}
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              {!mapLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-amber-50 animate-pulse text-amber-800 font-semibold">
+                  Loading map...
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center text-amber-800 font-semibold">
+              Map preparing...
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="flex-1 min-w-75 max-w-125 bg-white rounded-2xl p-8 shadow-lg">
+      <div className="w-full lg:flex-1 lg:min-w-[18rem] max-w-[31.25rem] bg-white rounded-2xl p-6 sm:p-8 shadow-lg">
         <h2 className="text-center text-2xl font-bold text-[#a0521c] mb-6">
           {t("contact_section.contactTitle")}
         </h2>

@@ -6,6 +6,8 @@ import ChangePassword from "../page/ChangePassword";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Overview from "../page/Overview"; 
 import Gallery from "../page/gallery";
+import FestivalEdit from "../page/FestivalEdit";
+import AdminOffering from "../page/oferingedits";
 
 export const router = createBrowserRouter([
   {
@@ -36,11 +38,20 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         element: <AdminProfile />,
+        
       },
       {
         path: "change-password",
         element: <ChangePassword />,
       },
+      {
+        path: "festival",
+        element: <FestivalEdit/>,
+      },
+      {
+        path: "ofering",
+        element: <AdminOffering/>
+      }
     ],
   },
 ]);

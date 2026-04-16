@@ -15,16 +15,17 @@ export const Footer = () => {
   return (
     <footer className="bg-gray-900 text-gray-300 py-10 w-full border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-[max-content_1fr_1fr] gap-y-8 md:gap-x-16 items-start">
-          <div className="flex items-center justify-center md:justify-start gap-2 w-full overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-[max-content_1fr_1fr] gap-y-8 gap-x-12 items-start">
+          <div className="sm:col-span-2 xl:col-span-1 flex items-center justify-center xl:justify-start gap-2 w-full overflow-hidden">
             <FaPrayingHands className="text-amber-400 text-2xl sm:text-3xl shrink-0" />
             <h2 className="font-bold text-white uppercase tracking-wide text-xs sm:text-sm md:text-lg lg:text-2xl whitespace-nowrap overflow-hidden text-ellipsis">
               {t("temple_full_name")}
             </h2>
           </div>
-          <div className="flex flex-col items-center md:items-start w-full">
+
+          <div className="flex flex-col items-center sm:items-start w-full">
             <div className="w-fit">
-              <h3 className="text-md font-semibold text-amber-400 mb-4 border-b border-amber-400/20 pb-2 text-center md:text-left uppercase tracking-wider">
+              <h3 className="text-md font-semibold text-amber-400 mb-4 border-b border-amber-400/20 pb-2 text-center sm:text-left uppercase tracking-wider">
                 {t("contact_info")}
               </h3>
               <ul className="space-y-4 text-sm">
@@ -67,9 +68,9 @@ export const Footer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center md:items-start w-full">
+          <div className="flex flex-col items-center sm:items-start w-full">
             <div className="w-full max-w-[320px] md:max-w-none">
-              <h3 className="text-md font-semibold text-amber-400 mb-4 border-b border-amber-400/20 pb-2 text-center md:text-left uppercase tracking-wider">
+              <h3 className="text-md font-semibold text-amber-400 mb-4 border-b border-amber-400/20 pb-2 text-center sm:text-left uppercase tracking-wider">
                 {t("temple_timings")}
               </h3>
               <div className="bg-gray-800/40 p-5 rounded-xl border border-gray-700/50">
@@ -78,7 +79,7 @@ export const Footer = () => {
                     <span className="flex items-center gap-2">
                       <FaClock className="text-amber-400" /> {t("morning")}
                     </span>
-                    <span className="font-mono text-white bg-gray-700 px-2 py-1 rounded">
+                    <span className="font-mono text-white bg-gray-700 px-2 py-1 rounded whitespace-nowrap min-w-[118px] text-center">
                       6:00-8:30 AM
                     </span>
                   </div>
@@ -87,7 +88,7 @@ export const Footer = () => {
                     <span className="flex items-center gap-2">
                       <FaClock className="text-amber-400" /> {t("evening")}
                     </span>
-                    <span className="font-mono text-white bg-gray-700 px-2 py-1 rounded">
+                    <span className="font-mono text-white bg-gray-700 px-2 py-1 rounded whitespace-nowrap min-w-[118px] text-center">
                       5:00-7:00 PM
                     </span>
                   </div>
@@ -97,10 +98,9 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Copyright */}
         <div className="text-center border-t border-gray-800 mt-12 pt-8">
           <p className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-[0.2em] leading-relaxed">
-            © {new Date().getFullYear()} {t("temple_full_name")} |{" "}
+            &copy; {new Date().getFullYear()} {t("temple_full_name")} |{" "}
             {t("all_rights_reserved")}
           </p>
         </div>

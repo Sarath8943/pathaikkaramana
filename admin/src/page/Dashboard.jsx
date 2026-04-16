@@ -76,6 +76,10 @@ export const Dashboard = () => {
             <GalleryIcon size={20} />
             <span className="font-semibold uppercase text-xs tracking-wider">Gallery </span>
           </Link>
+            <Link to="/dashboard/festival" className={navLinkStyle("/dashboard/festival")}>
+            <GalleryIcon size={20} />
+            <span className="font-semibold uppercase text-xs tracking-wider">Festvel </span>
+          </Link>
         </nav>
 
         <div className="mt-auto pt-6 border-t border-amber-900">

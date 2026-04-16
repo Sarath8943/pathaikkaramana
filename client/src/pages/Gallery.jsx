@@ -40,6 +40,7 @@ export const GalleryAlt = () => {
   }, [media]);
 
   const getVideoPoster = (item) => item.thumbnail || item.optimizedUrl || "";
+  const getGridImage = (item) => item.thumbnail || item.optimizedUrl || item.url;
 
   const handleDownload = async (url, filename) => {
     try {
@@ -95,10 +96,12 @@ export const GalleryAlt = () => {
                 >
                   {item.type === "image" ? (
                     <img
-                      src={item.url}
+                      src={getGridImage(item)}
                       className="w-full h-full object-cover"
                       alt=""
                       loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
                       crossOrigin="anonymous"
                     />
                   ) : (
@@ -109,6 +112,8 @@ export const GalleryAlt = () => {
                           className="w-full h-full object-cover"
                           alt=""
                           loading="lazy"
+                          decoding="async"
+                          fetchPriority="low"
                         />
                       ) : null}
                       <div className="absolute inset-0 flex items-center justify-center bg-black/20">

@@ -5,10 +5,13 @@ const isLocalhost =
   (window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1");
 
+const localApiBaseURL =
+  import.meta.env.VITE_LOCAL_API_BASE_URL || "http://localhost:5000/api";
+const remoteApiBaseURL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://pathaikkaramana.onrender.com/api";
 
-const apiBaseURL =
-  import.meta.env.VITE_API_BASE_URL || 
-  (isLocalhost ? "http://localhost:5000/api" : "https://pathaikkaramana.onrender.com/api");
+const apiBaseURL = isLocalhost ? localApiBaseURL : remoteApiBaseURL;
 
 const axiosInstance = axios.create({
   baseURL: apiBaseURL,
