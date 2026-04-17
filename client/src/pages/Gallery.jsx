@@ -13,9 +13,8 @@ export const Gallery = () => {
   const resolveMediaUrl = (rawUrl) => {
     if (!rawUrl || typeof rawUrl !== "string") return "";
 
-    if (rawUrl.startsWith("https://")) return rawUrl;
-    if (rawUrl.startsWith("http://")) {
-      return rawUrl.replace("http://", "https://");
+    if (rawUrl.startsWith("https://") || rawUrl.startsWith("http://")) {
+      return rawUrl;
     }
     if (rawUrl.startsWith("//")) return `https:${rawUrl}`;
 
@@ -41,9 +40,16 @@ export const Gallery = () => {
       try {
         setLoading(true);
         const res = await axiosInstance.get("/media");
+        console.log("Full Response:", res);
         const fetchedData = Array.isArray(res.data)
           ? res.data
-          : res.data.media || res.data.data || [];
+          : res.data?.media || res.data?.data || [];
+        if (!Array.isArray(fetchedData)) {
+          console.warn("Unexpected gallery API response:", res.data);
+          setMedia([]);
+          return;
+        }
+        console.log("Processed Data:", fetchedData);
         setMedia(fetchedData);
       } catch (err) {
         console.error("Gallery Fetch Error:", err);
@@ -130,7 +136,6 @@ export const Gallery = () => {
                       loading="lazy"
                       decoding="async"
                       fetchPriority="low"
-                      crossOrigin="anonymous"
                     />
                   ) : (
                     <div className="w-full h-full overflow-hidden bg-amber-950 relative">
