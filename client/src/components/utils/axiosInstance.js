@@ -5,9 +5,6 @@ const isLocalhost =
   (window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1");
 
-const localApiBaseURL =
-  import.meta.env.VITE_LOCAL_API_BASE_URL || "http://localhost:5000/api";
-
 const ensureApiSuffix = (baseURL) => {
   if (!baseURL) return "/api";
   if (baseURL === "/api" || baseURL.endsWith("/api")) return baseURL;
@@ -15,7 +12,13 @@ const ensureApiSuffix = (baseURL) => {
   return `${baseURL.replace(/\/+$/, "")}/api`;
 };
 
-const remoteApiBaseURL = ensureApiSuffix(import.meta.env.VITE_API_BASE_URL);
+const envRemoteApi = import.meta.env.VITE_API_BASE_URL;
+const envLocalApi = import.meta.env.VITE_LOCAL_API_BASE_URL;
+
+const localApiBaseURL = ensureApiSuffix(
+  envLocalApi || envRemoteApi || "http://localhost:5000/api",
+);
+const remoteApiBaseURL = ensureApiSuffix(envRemoteApi || envLocalApi || "/api");
 const apiBaseURL = isLocalhost ? localApiBaseURL : remoteApiBaseURL;
 
 const axiosInstance = axios.create({

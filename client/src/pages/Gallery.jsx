@@ -4,11 +4,37 @@ import { FaPlay, FaTimes, FaDownload } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-export const GalleryAlt = () => {
+export const Gallery = () => {
   const { t } = useTranslation();
   const [media, setMedia] = useState([]);
   const [loading, setLoading] = useState(true);
   const [preview, setPreview] = useState(null);
+
+  const resolveMediaUrl = (rawUrl) => {
+    if (!rawUrl || typeof rawUrl !== "string") return "";
+
+    if (rawUrl.startsWith("https://")) return rawUrl;
+    if (rawUrl.startsWith("http://")) {
+      return rawUrl.replace("http://", "https://");
+    }
+    if (rawUrl.startsWith("//")) return `https:${rawUrl}`;
+
+    const baseURL = axiosInstance.defaults.baseURL || "";
+    let apiOrigin = "";
+
+    if (baseURL.startsWith("http://") || baseURL.startsWith("https://")) {
+      try {
+        apiOrigin = new URL(baseURL).origin;
+      } catch (error) {
+        apiOrigin = "";
+      }
+    } else if (typeof window !== "undefined") {
+      apiOrigin = window.location.origin;
+    }
+
+    if (!apiOrigin) return rawUrl;
+    return `${apiOrigin}${rawUrl.startsWith("/") ? rawUrl : `/${rawUrl}`}`;
+  };
 
   useEffect(() => {
     const fetchMedia = async () => {
@@ -39,8 +65,10 @@ export const GalleryAlt = () => {
     return Object.entries(groups).sort((a, b) => b[0] - a[0]);
   }, [media]);
 
-  const getVideoPoster = (item) => item.thumbnail || item.optimizedUrl || "";
-  const getGridImage = (item) => item.thumbnail || item.optimizedUrl || item.url;
+  const getVideoPoster = (item) =>
+    resolveMediaUrl(item.thumbnail || item.optimizedUrl || "");
+  const getGridImage = (item) =>
+    resolveMediaUrl(item.thumbnail || item.optimizedUrl || item.url);
 
   const handleDownload = async (url, filename) => {
     try {
@@ -140,7 +168,10 @@ export const GalleryAlt = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleDownload(preview.url, `media-${preview.year}`);
+                  handleDownload(
+                    resolveMediaUrl(preview.url),
+                    `media-${preview.year}`,
+                  );
                 }}
                 className="text-white/70 hover:text-white transition-colors flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-md border border-white/20"
               >
@@ -166,13 +197,13 @@ export const GalleryAlt = () => {
                 <motion.img
                   initial={{ scale: 0.9 }}
                   animate={{ scale: 1 }}
-                  src={preview.url}
+                  src={resolveMediaUrl(preview.url)}
                   className="max-h-[90vh] max-w-full object-contain shadow-2xl"
                   alt="Full view"
                 />
               ) : (
                 <video
-                  src={preview.url}
+                  src={resolveMediaUrl(preview.url)}
                   poster={getVideoPoster(preview)}
                   controls
                   autoPlay
@@ -187,4 +218,4 @@ export const GalleryAlt = () => {
   );
 };
 
-export default GalleryAlt;
+export default Gallery;
