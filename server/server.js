@@ -25,7 +25,7 @@ app.use((req, res, next) => {
     "http://localhost:5173",
     "http://localhost:5174",
     "https://templeadmin.vercel.app",
-    "https://pathaikkaramana.vercel.app"
+    "https://pathaikkara-mana-bhagavathy-temple.vercel.app",
   ];
   const origin = req.headers.origin;
 
@@ -34,8 +34,14 @@ app.use((req, res, next) => {
   }
 
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS",
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+  );
 
   // OPTIONS (Preflight) റിക്വസ്റ്റ് വരുമ്പോൾ ഉടൻ മറുപടി നൽകുക
   if (req.method === "OPTIONS") {
@@ -52,7 +58,7 @@ app.use(
       res.set("Access-Control-Allow-Origin", "*");
       res.set("Cross-Origin-Resource-Policy", "cross-origin");
     },
-  })
+  }),
 );
 
 // 4. Database Connection
@@ -70,8 +76,8 @@ app.get("/", (req, res) => {
 // 6. Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error("Server Error:", err);
-  res.status(err.status || 500).json({ 
-    message: err.message || "Internal Server Error"
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error",
   });
 });
 
