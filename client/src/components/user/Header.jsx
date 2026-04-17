@@ -50,7 +50,7 @@ export const Header = () => {
       className="bg-yellow-800 text-white shadow-lg relative z-50"
       style={{
         backgroundImage:
-          "linear-gradient(to right, rgba(133,77,14,0.95), rgba(161,98,7,0.90)), url('https://images.unsplash.com/photo-1582632402513-121a20b75e59?w=1200')",
+          "linear-gradient(to right, rgba(133,77,14,0.95), rgba(161,98,7,0.90))",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -67,6 +67,9 @@ export const Header = () => {
               <img
                 src="/Bhagawathy.jpg"
                 alt="Logo"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
             </div>
