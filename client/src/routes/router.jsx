@@ -6,7 +6,7 @@ import { History } from "../pages/History";
 import { Offering } from "../pages/Offering";
 import { Festival } from "../pages/Festival";
 import { Error } from "../components/error/Error";
-import Gallery from "../pages/Gallery";
+import {Gallery} from "../pages/Gallery";
 import { Home } from "../pages/Home";
 import Pooja from "../pages/Pooja"; 
 
