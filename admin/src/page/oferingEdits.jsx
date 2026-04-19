@@ -4,7 +4,6 @@ import axios from 'axios';
 const AdminOffering = () => {
   const [offerings, setOfferings] = useState([]);
 
-  // ഡാറ്റ ലോഡ് ചെയ്യാൻ
   useEffect(() => {
     axios.get('/api/offerings').then(res => setOfferings(res.data));
   }, []);

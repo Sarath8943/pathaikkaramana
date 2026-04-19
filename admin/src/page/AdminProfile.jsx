@@ -20,7 +20,6 @@ export const AdminProfile = () => {
         if (data) {
           setAdminData({ name: data.name, email: data.email, phone: data.phone, profileImage: data.profileImage });
           setPreview(data.profileImage);
-          // ഡാഷ്‌ബോർഡുമായി സിങ്ക് ചെയ്യാൻ ലോക്കൽ സ്റ്റോറേജിലും സേവ് ചെയ്യുന്നു
           localStorage.setItem("profileImage", data.profileImage || "");
         }
       } catch (err) {
@@ -59,13 +58,12 @@ export const AdminProfile = () => {
         setMessage({ text: "Profile updated successfully!", type: "success" });
         const updated = res.data.admin;
         setAdminData(updated);
-        
-        // --- ഹെഡറിൽ ഫോട്ടോ ഉടൻ മാറാൻ വേണ്ടിയുള്ള വരികൾ ---
+
         if (updated.profileImage) {
           localStorage.setItem("profileImage", updated.profileImage);
-          window.dispatchEvent(new Event("storage")); // ഇത് ഹെഡറിനെ അറിയിക്കും
+          window.dispatchEvent(new Event("storage"));
         }
-        
+
         setIsEditing(false);
         setSelectedFile(null);
       }

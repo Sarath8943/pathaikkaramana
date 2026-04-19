@@ -1,4 +1,4 @@
-const cloudinary = require("cloudinary").v2;
+﻿const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 
@@ -11,15 +11,15 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "temple_gallery", 
-    resource_type: "auto", // 👈 ഇത് പ്രധാനമാണ്! എങ്കിലേ വീഡിയോ വർക്ക് ആകൂ.
-    allowed_formats: ["jpg", "png", "jpeg", "mp4", "mov"], // വീഡിയോ ഫോർമാറ്റുകളും ചേർത്തു
+    folder: "temple_gallery",
+    resource_type: "auto",
+    allowed_formats: ["jpg", "png", "jpeg", "mp4", "mov"],
   },
 });
 
-const upload = multer({ 
+const upload = multer({
   storage: storage,
-  limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit
+  limits: { fileSize: 100 * 1024 * 1024 },
 });
 
 module.exports = { cloudinary, upload };

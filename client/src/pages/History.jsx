@@ -20,7 +20,6 @@ export const History = () => {
 
   return (
     <div className="bg-gray-50 text-gray-900">
-      {/* Hero Section */}
       <div className="relative w-full h-screen min-h-125 overflow-hidden">
         {images.map((src, index) => (
           <img
@@ -53,10 +52,8 @@ export const History = () => {
         </div>
       </div>
 
-      {/* Main Content Sections */}
       <div className="py-12 sm:py-20 px-4 sm:px-8 space-y-16">
-        
-        {/* Story Section */}
+
         <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <motion.img src="/pathikkara manna.jpg" alt="Mana" className="rounded-xl shadow-2xl w-full" initial="hidden" whileInView="visible" variants={slideRight} />
           <motion.div initial="hidden" whileInView="visible" variants={slideLeft}>
@@ -67,7 +64,6 @@ export const History = () => {
           </motion.div>
         </section>
 
-        {/* Valluvanad Section */}
         <section className="bg-gray-100 py-16 px-4 rounded-3xl max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <motion.div initial="hidden" whileInView="visible" variants={slideLeft}>
             <h2 className="text-3xl font-bold text-yellow-700 mb-6">{t("history_page.valluvanad.title")}</h2>
@@ -76,7 +72,6 @@ export const History = () => {
           <motion.img src="/pathaikkara.jpg" alt="History" className="rounded-xl shadow-2xl w-full" initial="hidden" whileInView="visible" variants={slideRight} />
         </section>
 
-        {/* Deity Section */}
         <section className="max-w-7xl mx-auto bg-white p-6 sm:p-12 rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-2 gap-8">
           <motion.img src="/Bhagawathy.jpg" alt="Deity" className="w-full h-auto rounded-xl" initial="hidden" whileInView="visible" variants={slideRight} />
           <motion.div initial="hidden" whileInView="visible" variants={slideLeft}>
@@ -85,7 +80,6 @@ export const History = () => {
           </motion.div>
         </section>
 
-        {/* Architecture & Keepers */}
         <section className="max-w-7xl mx-auto space-y-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <motion.img src="/pathikkara1.jpg" className="rounded-xl shadow-2xl w-full" initial="hidden" whileInView="visible" variants={slideLeft} />

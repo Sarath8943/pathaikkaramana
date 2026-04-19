@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { FiUsers, FiUploadCloud, FiSettings, FiLogOut } from 'react-icons/fi';
 
  export const Overview = () => {
-  // Sample Data for Stats
   const stats = [
     { id: 1, label: 'Total Users', value: '1,250', icon: <FiUsers /> },
     { id: 2, label: 'Media Uploads', value: '450', icon: <FiUploadCloud /> },
@@ -11,7 +10,6 @@ import { FiUsers, FiUploadCloud, FiSettings, FiLogOut } from 'react-icons/fi';
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
-      {/* Sidebar / Navigation */}
       <nav className="flex items-center justify-between px-8 py-6 bg-white border-b border-gray-100">
         <h1 className="text-xl font-semibold tracking-tight">Admin Console</h1>
         <div className="flex items-center gap-6">
@@ -25,7 +23,6 @@ import { FiUsers, FiUploadCloud, FiSettings, FiLogOut } from 'react-icons/fi';
         </div>
       </nav>
 
-      {/* Main Content */}
       <main className="max-w-6xl mx-auto mt-12 px-6">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -37,7 +34,6 @@ import { FiUsers, FiUploadCloud, FiSettings, FiLogOut } from 'react-icons/fi';
             <p className="text-gray-500 mt-2">Here is what's happening with your projects today.</p>
           </header>
 
-          {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {stats.map((stat) => (
               <div 
@@ -52,13 +48,11 @@ import { FiUsers, FiUploadCloud, FiSettings, FiLogOut } from 'react-icons/fi';
               </div>
             ))}
             
-            {/* Quick Action Card */}
             <div className="p-6 bg-blue-50 border border-blue-100 rounded-2xl flex flex-col justify-center items-center cursor-pointer hover:bg-blue-100 transition-colors">
               <span className="text-blue-600 font-medium">+ New Upload</span>
             </div>
           </div>
 
-          {/* Recent Activity Section */}
           <section className="bg-white border border-gray-100 rounded-2xl p-8">
             <h3 className="text-lg font-semibold mb-6">Recent Activity</h3>
             <div className="space-y-6">

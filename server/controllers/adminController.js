@@ -72,7 +72,6 @@ exports.adminLogin = async (req, res) => {
   try {
     const { email, phone, password } = req.body;
 
-    // 1. ഫീൽഡുകൾ ഉണ്ടോ എന്ന് നോക്കുന്നു
     if ((!email && !phone) || !password) {
       return res.status(400).json({
         success: false,
@@ -80,7 +79,6 @@ exports.adminLogin = async (req, res) => {
       });
     }
 
-    // 2. അഡ്മിനെ കണ്ടെത്തുന്നു
     const query = email ? { email } : { phone };
     const admin = await Admin.findOne(query);
 
@@ -91,7 +89,6 @@ exports.adminLogin = async (req, res) => {
       });
     }
 
-    // 3. പാസ്‌വേഡ് ചെക്ക് ചെയ്യുന്നു
     const isMatch = await admin.comparePassword(password);
     if (!isMatch) {
       return res.status(401).json({
@@ -100,22 +97,19 @@ exports.adminLogin = async (req, res) => {
       });
     }
 
-    // 4. ടോക്കൺ ഉണ്ടാക്കുന്നു (id തന്നെയാണോ എന്ന് ഉറപ്പാക്കുക)
     const token = generateToken(admin._id);
 
-    // 5. കുക്കി സെറ്റ് ചെയ്യുന്നു (Cross-domain support-ന് വേണ്ടി)
     res.cookie("adminToken", token, {
       httpOnly: true,
-      secure: true, // Render-ൽ ഇത് നിർബന്ധമാണ് (HTTPS)
-      sameSite: "none", // Vercel-ൽ നിന്ന് ആക്സസ് ചെയ്യാൻ ഇത് 'none' ആയിരിക്കണം
-      maxAge: 24 * 60 * 60 * 1000, // 1 ദിവസം
+      secure: true,
+      sameSite: "none",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
-    // 6. ഫൈനൽ റെസ്‌പോൺസ്
     res.status(200).json({
       success: true,
       message: "Admin login successful",
-      token: token, // ഫ്രണ്ട് എൻഡിൽ sessionStorage-ൽ സേവ് ചെയ്യാൻ
+      token: token,
       admin: {
         id: admin._id,
         name: admin.name,
@@ -257,7 +251,7 @@ exports.getAdminProfile = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      admin: adminData, // ഫ്രണ്ട്-എൻഡിലേക്ക് സുരക്ഷിതമായ ഡാറ്റ മാത്രം അയക്കുന്നു
+      admin: adminData,
     });
   } catch (error) {
     console.error("GET ADMIN PROFILE ERROR 👉", error.message);

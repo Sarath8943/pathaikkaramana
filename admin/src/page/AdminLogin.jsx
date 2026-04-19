@@ -56,11 +56,7 @@ export const Login = () => {
 
     try {
       const res = await axiosInstance.post("/admin/login", form);
-
-      // മാറ്റം വരുത്തിയത് ഇവിടെയാണ്: localStorage-ന് പകരം sessionStorage ഉപയോഗിക്കുന്നു
       sessionStorage.setItem("token", res.data.token);
-
-      // ഡാഷ്ബോർഡിലേക്ക് പോകുന്നു
       navigate("/dashboard", { replace: true });
     } catch (error) {
       const errorMsg =
@@ -83,7 +79,6 @@ export const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-stone-50 p-6">
       <div className="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-amber-100">
-        {/* Left Side: Branding */}
         <div className="md:w-2/5 bg-amber-800 p-10 text-white flex flex-col justify-between relative overflow-hidden">
           <div className="relative z-10">
             <ShieldCheck className="w-12 h-12 mb-6 text-amber-300" />
@@ -103,7 +98,6 @@ export const Login = () => {
           <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-amber-700 rounded-full opacity-50 blur-3xl"></div>
         </div>
 
-        {/* Right Side: Form */}
         <div className="flex-1 p-10 lg:p-14 bg-white">
           <div className="mb-8">
             <h3 className="text-2xl font-bold text-stone-800">Welcome Back</h3>

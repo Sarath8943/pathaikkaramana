@@ -14,12 +14,10 @@ const multer = require("multer");
 const app = express();
 const port = process.env.PORT || 5000;
 
-// 1. Body Parsers & Cookie Parser
 app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ limit: "100mb", extended: true }));
 app.use(cookieParser());
 
-// 2. ✅ CORRECT CORS MANUAL MIDDLEWARE (ഇത് കൃത്യമായി കോപ്പി ചെയ്യുക)
 app.use((req, res, next) => {
   const allowedOrigins = [
     "http://localhost:5173",
@@ -43,14 +41,12 @@ app.use((req, res, next) => {
     "Origin, X-Requested-With, Content-Type, Accept, Authorization",
   );
 
-  // OPTIONS (Preflight) റിക്വസ്റ്റ് വരുമ്പോൾ ഉടൻ മറുപടി നൽകുക
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
   next();
 });
 
-// 3. Static Folder
 app.use(
   "/uploads",
   express.static("uploads", {
@@ -61,10 +57,8 @@ app.use(
   }),
 );
 
-// 4. Database Connection
 connectDB();
 
-// 5. Routes (CORS-ന് താഴെ മാത്രം നൽകുക)
 app.use("/api/admin", adminRoutes);
 app.use("/api/media", mediaRoutes);
 app.use("/api/festival", festivalRoutes);
@@ -73,7 +67,6 @@ app.get("/", (req, res) => {
   res.send("API Running - CORS Fixed Version");
 });
 
-// 6. Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error("Server Error:", err);
   res.status(err.status || 500).json({

@@ -26,7 +26,6 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      // 2. ഇതാണ് ലോഗിൻ ചെയ്യുമ്പോൾ ആദ്യം കാണേണ്ട പേജ്
       {
         index: true,
         element: <Overview />, 

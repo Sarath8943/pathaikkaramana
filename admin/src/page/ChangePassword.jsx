@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // 1. useNavigate ഇമ്പോർട്ട് ചെയ്യുക
+import { useNavigate } from "react-router-dom";
 import {
   Lock,
   KeyRound,
@@ -13,7 +13,7 @@ import {
 import axiosInstance from "../utils/axiosInstance";
 
 const ChangePassword = () => {
-  const navigate = useNavigate(); // 2. നാവിഗേഷൻ ഫംഗ്ഷൻ സെറ്റ് ചെയ്യുന്നു
+  const navigate = useNavigate();
 
   const [passwords, setPasswords] = useState({
     oldPassword: "",
@@ -55,11 +55,9 @@ const ChangePassword = () => {
         type: "success",
       });
 
-      // 3. പാസ്‌വേഡ് മാറിക്കഴിഞ്ഞാൽ പഴയ ടോക്കൺ കളയുന്നത് നല്ലതാണ്
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("role");
 
-      // 4. 2 സെക്കൻഡിന് ശേഷം ലോഗിൻ പേജിലേക്ക് വിടുന്നു
       setTimeout(() => {
         navigate("/login", { replace: true });
       }, 2000);
@@ -103,7 +101,6 @@ const ChangePassword = () => {
             </p>
           </div>
 
-          {/* ബ്ലർ സർക്കിൾ - ഇതിൽ pointer-events-none നൽകണം */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-amber-700/30 rounded-full -mr-16 -mt-16 blur-2xl pointer-events-none"></div>
         </div>
 
