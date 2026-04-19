@@ -5,9 +5,9 @@ import AdminProfile from "../page/AdminProfile";
 import ChangePassword from "../page/ChangePassword";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Overview from "../page/Overview"; 
-import Gallery from "../page/gallery";
+import Gallery from "../page/Gallery";
 import FestivalEdit from "../page/FestivalEdit";
-import AdminOffering from "../page/oferingedits";
+import AdminOffering from "../page/oferingEdits";
 
 export const router = createBrowserRouter([
   {
