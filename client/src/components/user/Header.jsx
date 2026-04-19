@@ -45,28 +45,26 @@ export const Header = () => {
   return (
     <header className="bg-[#5d3101] text-white shadow-lg relative z-50 w-full">
       <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
-        <div className="flex justify-between items-center h-16 sm:h-20 lg:h-24 gap-4">
+        <div className="flex justify-between items-center h-16 sm:h-20 lg:h-24">
           
-          {/* 1. ലോഗോയും പേരും - എല്ലാ സ്ക്രീനിലും Straight ആയി നിൽക്കാൻ whitespace-nowrap */}
+          {/* 1. ലോഗോയും പേരും - എല്ലാ ഡിവൈസിലും Straight ആയി നിൽക്കാൻ whitespace-nowrap */}
           <Link to="/home" className="flex items-center gap-2 sm:gap-3 shrink-0">
             <div className="w-10 h-10 sm:w-12 lg:w-16 lg:h-16 rounded-full border-2 border-yellow-500 overflow-hidden shadow-md shrink-0">
               <img src="/Bhagawathy.jpg" alt="Logo" className="w-full h-full object-cover" />
             </div>
-            <h1 className="font-bold text-[13px] sm:text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] tracking-tight whitespace-nowrap">
+            <h1 className="font-bold text-[12px] sm:text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] tracking-tight whitespace-nowrap">
               {t("temple_name")}
             </h1>
           </Link>
 
           {/* 2. ഡെസ്ക്ടോപ്പ് മെനു (xl സ്ക്രീനിൽ മാത്രം) */}
           <nav className="hidden xl:flex flex-1 justify-center mx-4">
-            <ul className={`flex items-center justify-between w-full max-w-4xl list-none m-0 p-0 ${
-              i18n.language.includes('en') ? 'gap-8' : 'gap-4'
-            }`}>
+            <ul className="flex items-center justify-between w-full max-w-4xl list-none m-0 p-0 gap-4">
               {navItems.map((item, idx) => (
                 <li key={idx}>
                   <Link
                     to={item.href}
-                    className="text-[14px] lg:text-[15px] font-bold hover:text-yellow-400 transition-colors whitespace-nowrap uppercase tracking-wider"
+                    className="text-[14px] lg:text-[15px] font-bold hover:text-yellow-400 transition-colors whitespace-nowrap uppercase"
                   >
                     {item.name}
                   </Link>
@@ -75,28 +73,31 @@ export const Header = () => {
             </ul>
           </nav>
 
-          {/* 3. റൈറ്റ് സൈഡ് എലമെന്റ്സ് */}
-          <div className="flex items-center gap-3 shrink-0">
-            {/* വലിയ സ്ക്രീനുകളിൽ മാത്രം കാണുന്ന ലാംഗ്വേജ് ബട്ടൺ */}
-            <div className="hidden xl:flex gap-1 bg-black/20 p-1 rounded-md border border-white/10">
+          {/* 3. ലാംഗ്വേജ് ബട്ടണുകൾ & ഹാംബർഗർ */}
+          <div className="flex items-center gap-3 shrink-0 ml-2">
+            
+            {/* ലാപ്ടോപ്പ്/ഡെസ്ക്ടോപ്പ് (md സ്ക്രീനിന് മുകളിൽ) ലാംഗ്വേജ് ബട്ടൺ കാണും */}
+            <div className="hidden md:flex flex-nowrap items-center bg-black/20 p-1 rounded-md border border-white/10">
               {["ml", "en"].map((lang) => (
                 <button
                   key={lang}
                   onClick={() => changeLanguage(lang)}
-                  className={`px-3 py-1.5 rounded text-[11px] font-bold transition-all ${
-                    i18n.language.includes(lang) ? "bg-yellow-500 text-black shadow-sm" : "text-gray-300 hover:text-white"
+                  className={`px-3 py-1.5 rounded text-[11px] font-bold transition-all whitespace-nowrap ${
+                    i18n.language.includes(lang) 
+                      ? "bg-yellow-500 text-black shadow-sm" 
+                      : "text-gray-300 hover:text-white"
                   }`}
                 >
-                  {lang === "ml" ? "മലയാളം" : "EN"}
+                  {lang === "ml" ? "മലയാളം" : "English"}
                 </button>
               ))}
             </div>
 
-            {/* ഹാംബർഗർ ബട്ടൺ (മൊബൈൽ, പാഡ്, ലാപ്ടോപ്പ് - xl സ്ക്രീനിന് താഴെയുള്ളവ) */}
+            {/* ഹാംബർഗർ ബട്ടൺ (മൊബൈലിൽ മാത്രം) */}
             <button
               ref={buttonRef}
               onClick={() => setIsOpen(!isOpen)}
-              className="xl:hidden p-1 text-3xl text-yellow-500 hover:bg-yellow-900/50 rounded-lg"
+              className="xl:hidden p-1 text-3xl text-yellow-500"
             >
               {isOpen ? "✕" : "☰"}
             </button>
@@ -104,10 +105,10 @@ export const Header = () => {
         </div>
       </div>
 
-      {/* 4. ഡ്രോപ്പ്ഡൗൺ മെനു (ചെറിയ ഡിവൈസുകളിൽ ലാംഗ്വേജ് ബട്ടൺ ഇതിനുള്ളിലാകും) */}
+      {/* 4. മൊബൈൽ ഡ്രോപ്പ്ഡൗൺ മെനു */}
       <div
         ref={menuRef}
-        className={`xl:hidden absolute top-full left-0 w-full bg-[#3d2001] border-t border-white/10 transition-all duration-300 shadow-2xl ${
+        className={`xl:hidden absolute top-full left-0 w-full bg-[#3d2001] transition-all duration-300 ${
           isOpen ? "translate-y-0 opacity-100 visible" : "-translate-y-2 opacity-0 invisible"
         }`}
       >
@@ -123,8 +124,8 @@ export const Header = () => {
             </Link>
           ))}
 
-          {/* ലാംഗ്വേജ് ബട്ടണുകൾ മെനുവിന്റെ ഉള്ളിൽ കൃത്യമായി സെറ്റ് ചെയ്തു */}
-          <div className="flex gap-2 pt-5 border-t border-white/10 mt-3">
+          {/* ചെറിയ ഡിവൈസുകളിൽ ലാംഗ്വേജ് ബട്ടണുകൾ മെനുവിന്റെ ഉള്ളിൽ വരും */}
+          <div className="flex gap-2 pt-5 md:hidden border-t border-white/10 mt-3">
             {["ml", "en"].map((lang) => (
               <button
                 key={lang}
