@@ -1,254 +1,128 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
+
+
+
+
+import React, { useState, useMemo, useEffect } from "react";
 import axiosInstance from "../components/utils/axiosInstance";
-import { FaPlay, FaTimes, FaDownload } from "react-icons/fa";
-import { AnimatePresence } from "framer-motion";
+import { FaPlay, FaTimes } from "react-icons/fa";
+import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 const GALLERY_CACHE_KEY = "gallery_media_cache_v1";
-const GALLERY_CACHE_TTL_MS = 5 * 60 * 1000;
-
-const getValidCachedMedia = () => {
-  if (typeof window === "undefined") return [];
-  try {
-    const cached = window.localStorage.getItem(GALLERY_CACHE_KEY);
-    if (!cached) return [];
-    const parsed = JSON.parse(cached);
-    const isCacheValid =
-      Array.isArray(parsed?.items) &&
-      typeof parsed?.savedAt === "number" &&
-      Date.now() - parsed.savedAt < GALLERY_CACHE_TTL_MS;
-    return isCacheValid ? parsed.items : [];
-  } catch {
-    return [];
-  }
-};
 
 export const Gallery = () => {
   const { t } = useTranslation();
-  const [media, setMedia] = useState(() => getValidCachedMedia());
-  const [loading, setLoading] = useState(() => getValidCachedMedia().length === 0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  // 1. ഉടനെ ഡാറ്റ കാണിക്കാൻ LocalStorage ഉപയോഗിക്കുന്നു
+  const [media, setMedia] = useState(() => {
+    const cached = localStorage.getItem(GALLERY_CACHE_KEY);
+    return cached ? JSON.parse(cached).items : [];
+  });
+
   const [preview, setPreview] = useState(null);
-  const hasInitialMediaRef = useRef(media.length > 0);
+  const [visibleCount, setVisibleCount] = useState(20); // ആദ്യം 20 എണ്ണം മാത്രം കാണിക്കുന്നു
 
   const resolveMediaUrl = (rawUrl) => {
-    if (!rawUrl || typeof rawUrl !== "string") return "";
-
-    if (rawUrl.startsWith("https://") || rawUrl.startsWith("http://")) {
-      return rawUrl;
-    }
-    if (rawUrl.startsWith("//")) return `https:${rawUrl}`;
-
-    const baseURL = axiosInstance.defaults.baseURL || "";
-    let apiOrigin = "";
-
-    if (baseURL.startsWith("http://") || baseURL.startsWith("https://")) {
-      try {
-        apiOrigin = new URL(baseURL).origin;
-      } catch {
-        apiOrigin = "";
-      }
-    } else if (typeof window !== "undefined") {
-      apiOrigin = window.location.origin;
-    }
-
-    if (!apiOrigin) return rawUrl;
+    if (!rawUrl) return "";
+    if (rawUrl.startsWith("http")) return rawUrl;
+    const apiOrigin = axiosInstance.defaults.baseURL ? new URL(axiosInstance.defaults.baseURL).origin : window.location.origin;
     return `${apiOrigin}${rawUrl.startsWith("/") ? rawUrl : `/${rawUrl}`}`;
   };
 
   useEffect(() => {
     const fetchMedia = async () => {
       try {
-        if (!hasInitialMediaRef.current) {
-          setLoading(true);
-        } else {
-          setIsRefreshing(true);
-        }
         const res = await axiosInstance.get("/media");
-        const fetchedData = Array.isArray(res.data)
-          ? res.data
-          : res.data?.media || res.data?.data || [];
-        if (!Array.isArray(fetchedData)) {
-          console.warn("Unexpected gallery API response:", res.data);
-          setMedia([]);
-          return;
-        }
+        const fetchedData = Array.isArray(res.data) ? res.data : res.data?.media || [];
+        
         setMedia(fetchedData);
-        if (typeof window !== "undefined") {
-          window.localStorage.setItem(
-            GALLERY_CACHE_KEY,
-            JSON.stringify({ items: fetchedData, savedAt: Date.now() }),
-          );
-        }
+        localStorage.setItem(GALLERY_CACHE_KEY, JSON.stringify({ items: fetchedData, savedAt: Date.now() }));
       } catch (err) {
-        console.error("Gallery Fetch Error:", err);
-      } finally {
-        setLoading(false);
-        setIsRefreshing(false);
+        console.error(err);
       }
     };
     fetchMedia();
   }, []);
 
+  // സ്ക്രോൾ ചെയ്യുമ്പോൾ കൂടുതൽ ഡാറ്റ ലോഡ് ചെയ്യാൻ
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        setVisibleCount((prev) => prev + 20);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const groupedMedia = useMemo(() => {
     const groups = {};
-    if (!media.length) return [];
-    media.forEach((item) => {
+    // ലിമിറ്റ് ചെയ്ത ഡാറ്റ മാത്രം ഗ്രൂപ്പ് ചെയ്യുന്നു (വേഗത കൂട്ടാൻ)
+    media.slice(0, visibleCount).forEach((item) => {
       const year = item.year || "Archive";
       if (!groups[year]) groups[year] = [];
       groups[year].push(item);
     });
     return Object.entries(groups).sort((a, b) => b[0] - a[0]);
-  }, [media]);
-
-  const getVideoPoster = (item) =>
-    resolveMediaUrl(item.thumbnail || item.optimizedUrl || "");
-  const getGridImage = (item) =>
-    resolveMediaUrl(item.thumbnail || item.optimizedUrl || item.url);
-
-  const handleDownload = async (url, filename) => {
-    try {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = filename || "download";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      console.error("Download failed:", error);
-    }
-  };
+  }, [media, visibleCount]);
 
   return (
-    <div className="min-h-screen bg-amber-50/20 p-6 md:p-12 font-sans">
-      <h1 className="text-4xl font-black text-amber-950 mb-12 tracking-tighter italic uppercase">
-        {t("gallery")}
-      </h1>
-      {isRefreshing ? (
-        <p className="mb-6 text-xs uppercase tracking-widest text-amber-800/70">
-          Updating latest media...
-        </p>
-      ) : null}
+    <div className="min-h-screen bg-amber-50/20 p-4 md:p-12">
+      <h1 className="text-4xl font-black text-amber-950 mb-12 uppercase italic">{t("gallery")}</h1>
 
-      {loading && groupedMedia.length === 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {Array.from({ length: 10 }).map((_, index) => (
-            <div
-              key={`gallery-skeleton-${index}`}
-              className="aspect-square rounded-[2rem] bg-amber-100/60 animate-pulse"
-            />
-          ))}
+      {groupedMedia.length === 0 && (
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[...Array(10)].map((_, i) => <div key={i} className="aspect-square bg-amber-100 animate-pulse rounded-2xl" />)}
         </div>
-      ) : groupedMedia.length === 0 ? (
-        <div className="text-center py-24 bg-white rounded-[4rem] border-4 border-dashed border-amber-50">
-          <p className="text-amber-900/30 text-xl font-black italic uppercase tracking-widest">
-            No Media Found
-          </p>
-        </div>
-      ) : (
-        groupedMedia.map(([year, items], groupIndex) => (
-          <div key={year} className="mb-16">
-            <h2 className="text-xl font-black text-amber-900 mb-8 flex items-center gap-4">
-              <span className="w-8 h-1 bg-amber-600 rounded-full"></span>
-              {year}
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-              {items.map((item, itemIndex) => {
-                const prioritizeImage = groupIndex === 0 && itemIndex < 6;
-                return (
-                <div
-                  key={item._id}
-                  onClick={() => setPreview(item)}
-                  className="cursor-pointer bg-white rounded-[2rem] shadow-md overflow-hidden aspect-square relative border-4 border-white transition-all hover:shadow-xl"
-                >
-                  {item.type === "image" ? (
-                    <img
-                      src={getGridImage(item)}
-                      className="w-full h-full object-cover"
-                      alt=""
-                      loading={prioritizeImage ? "eager" : "lazy"}
-                      decoding="async"
-                      fetchPriority={prioritizeImage ? "high" : "low"}
-                    />
-                  ) : (
-                    <div className="w-full h-full overflow-hidden bg-amber-950 relative">
-                      {getVideoPoster(item) ? (
-                        <img
-                          src={getVideoPoster(item)}
-                          className="w-full h-full object-cover"
-                          alt=""
-                          loading={prioritizeImage ? "eager" : "lazy"}
-                          decoding="async"
-                          fetchPriority={prioritizeImage ? "high" : "low"}
-                        />
-                      ) : null}
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                        <FaPlay className="text-white/80 text-4xl z-10" />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )})}
-            </div>
-          </div>
-        ))
       )}
+
+      {groupedMedia.map(([year, items]) => (
+        <div key={year} className="mb-12">
+          <h2 className="text-xl font-bold text-amber-900 mb-6 flex items-center gap-3">
+            <span className="w-6 h-1 bg-amber-600 rounded-full"></span> {year}
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {items.map((item) => (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                key={item._id}
+                onClick={() => setPreview(item)}
+                className="relative aspect-square bg-white rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:scale-[1.02] transition-transform"
+              >
+                <img
+                  src={resolveMediaUrl(item.thumbnail || item.optimizedUrl || item.url)}
+                  alt=""
+                  loading="lazy" 
+                  className="w-full h-full object-cover"
+                />
+                {item.type !== "image" && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                    <FaPlay className="text-white text-3xl" />
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      ))}
 
       <AnimatePresence>
         {preview && (
-          <div
-            className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4"
+            onClick={() => setPreview(null)}
           >
-            <div className="absolute top-6 right-6 flex items-center gap-6 z-[110]">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDownload(
-                    resolveMediaUrl(preview.url),
-                    `media-${preview.year}`,
-                  );
-                }}
-                className="text-white/70 hover:text-white transition-colors flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-md border border-white/20"
-              >
-                <FaDownload />{" "}
-                <span className="text-xs font-bold uppercase tracking-widest">
-                  Download
-                </span>
-              </button>
-
-              <button
-                onClick={() => setPreview(null)}
-                className="text-white/50 hover:text-white text-3xl transition-colors"
-              >
-                <FaTimes />
-              </button>
-            </div>
-
-            <div
-              className="w-full h-full flex items-center justify-center"
-              onClick={() => setPreview(null)}
-            >
+            <div className="max-w-5xl w-full h-full flex items-center justify-center">
               {preview.type === "image" ? (
-                <img
-                  src={resolveMediaUrl(preview.url)}
-                  className="max-h-[90vh] max-w-full object-contain shadow-2xl"
-                  alt="Full view"
-                />
+                <img src={resolveMediaUrl(preview.url)} className="max-h-full object-contain" alt="" />
               ) : (
-                <video
-                  src={resolveMediaUrl(preview.url)}
-                  poster={getVideoPoster(preview)}
-                  controls
-                  autoPlay
-                  className="max-h-[90vh] max-w-full shadow-2xl"
-                />
+                <video src={resolveMediaUrl(preview.url)} controls autoPlay className="max-h-full" />
               )}
             </div>
-          </div>
+            <button className="absolute top-5 right-5 text-white text-3xl"><FaTimes /></button>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
