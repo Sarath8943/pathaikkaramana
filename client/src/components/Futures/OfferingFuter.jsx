@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export const OfferingFuter = ({ title, image, items }) => {
+  const fallbackImage = "/Bhagawathy.jpg";
+  const [imgSrc, setImgSrc] = useState(image || fallbackImage);
+
+  useEffect(() => {
+    setImgSrc(image || fallbackImage);
+  }, [image]);
+
   return (
     <div className="bg-white rounded-2xl shadow-md p-3 hover:shadow-lg transition-shadow flex flex-col h-full">
       <img
-        src={image}
+        src={imgSrc}
         alt={title}
+        loading="lazy"
+        decoding="async"
+        fetchPriority="low"
+        width={56}
+        height={56}
+        onError={() => setImgSrc(fallbackImage)}
         className="mx-auto w-14 h-14 mb-2 rounded-full object-cover shadow-md border-2 border-amber-400"
       />
       <h2 className="text-lg font-semibold text-neutral-700 mb-2 text-center">

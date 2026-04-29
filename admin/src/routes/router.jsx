@@ -7,7 +7,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Overview from "../page/Overview"; 
 import Gallery from "../page/Gallery";
 import FestivalEdit from "../page/FestivalEdit";
-import AdminOffering from "../page/oferingEdits";
+import Offering from "../page/OfferingEdit";
 
 export const router = createBrowserRouter([
   {
@@ -48,8 +48,8 @@ export const router = createBrowserRouter([
         element: <FestivalEdit/>,
       },
       {
-        path: "ofering",
-        element: <AdminOffering/>
+        path: "offerings",
+        element: <Offering/>
       }
     ],
   },

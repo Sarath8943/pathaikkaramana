@@ -84,8 +84,6 @@ export const Login = () => {
             <ShieldCheck className="w-12 h-12 mb-6 text-amber-300" />
             <h2 className="text-3xl font-bold leading-tight">
               Admin
-              <br />
-              Console
             </h2>
             <p className="text-amber-100/80 mt-4 font-light leading-relaxed">
               Securely sign in to manage your platform. Closing the tab will end

@@ -14,14 +14,11 @@ const ensureApiSuffix = (baseURL) => {
 
 const envRemoteApi = import.meta.env.VITE_API_BASE_URL;
 const envLocalApi = import.meta.env.VITE_LOCAL_API_BASE_URL;
+const defaultLocalApi = "http://localhost:5000/api";
 const defaultRemoteApi = "https://pathaikkaramana.onrender.com/api";
 
-const localApiBaseURL = ensureApiSuffix(
-  envLocalApi || envRemoteApi || defaultRemoteApi,
-);
-const remoteApiBaseURL = ensureApiSuffix(
-  envRemoteApi || envLocalApi || defaultRemoteApi,
-);
+const localApiBaseURL = ensureApiSuffix(envLocalApi || defaultLocalApi);
+const remoteApiBaseURL = ensureApiSuffix(envRemoteApi || defaultRemoteApi);
 const apiBaseURL = isLocalhost ? localApiBaseURL : remoteApiBaseURL;
 
 const axiosInstance = axios.create({
@@ -33,10 +30,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  (config) => {
-    console.log("Request URL:", `${config.baseURL || ""}${config.url || ""}`);
-    return config;
-  },
+  (config) => config,
   (error) => Promise.reject(error),
 );
 

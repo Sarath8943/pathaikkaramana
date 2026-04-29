@@ -80,6 +80,10 @@ export const Dashboard = () => {
             <GalleryIcon size={20} />
             <span className="font-semibold uppercase text-xs tracking-wider">Festvel </span>
           </Link>
+           <Link to="/dashboard/offerings" className={navLinkStyle("/dashboard/offerings")}>
+            <GalleryIcon size={20} />
+            <span className="font-semibold uppercase text-xs tracking-wider">offering </span>
+          </Link>
         </nav>
 
         <div className="mt-auto pt-6 border-t border-amber-900">

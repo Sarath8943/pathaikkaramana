@@ -21,6 +21,21 @@ export const Contact = () => {
       return;
     }
 
+    const preconnectUrls = [
+      "https://www.google.com",
+      "https://maps.googleapis.com",
+      "https://maps.gstatic.com",
+    ];
+
+    const preconnectLinks = preconnectUrls.map((href) => {
+      const link = document.createElement("link");
+      link.rel = "preconnect";
+      link.href = href;
+      link.crossOrigin = "anonymous";
+      document.head.appendChild(link);
+      return link;
+    });
+
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
@@ -29,11 +44,17 @@ export const Contact = () => {
           observer.disconnect();
         }
       },
-      { rootMargin: "250px 0px" },
+      { rootMargin: "900px 0px" },
     );
 
     observer.observe(target);
-    return () => observer.disconnect();
+
+    return () => {
+      observer.disconnect();
+      preconnectLinks.forEach((link) => {
+        document.head.removeChild(link);
+      });
+    };
   }, [mapShouldLoad]);
 
   const sendEmail = (e) => {
@@ -74,7 +95,7 @@ export const Contact = () => {
                 title="Location Map"
                 src={mapUrl}
                 className="w-full h-full border-0"
-                loading="lazy"
+                loading="eager"
                 onLoad={() => setMapLoaded(true)}
                 referrerPolicy="no-referrer-when-downgrade"
               />

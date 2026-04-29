@@ -8,6 +8,9 @@ const connectDB = require("./config/db");
 const adminRoutes = require("./routes/adminRoutes");
 const mediaRoutes = require("./routes/mediaRoutes");
 const festivalRoutes = require("./routes/festivalRoutes");
+const offeringRoutes = require("./routes/offeringRoutes"); 
+// ------------------------------
+
 const cookieParser = require("cookie-parser");
 const multer = require("multer");
 
@@ -62,7 +65,8 @@ connectDB();
 app.use("/api/admin", adminRoutes);
 app.use("/api/media", mediaRoutes);
 app.use("/api/festival", festivalRoutes);
-
+app.use("/api/offering", offeringRoutes); 
+ 
 app.get("/", (req, res) => {
   res.send("API Running - CORS Fixed Version");
 });
