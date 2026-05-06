@@ -61,12 +61,12 @@ function Signup() {
     "absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-amber-700";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-stone-50 p-6">
-      <div className="flex w-full max-w-4xl flex-col overflow-hidden rounded-[2.5rem] border border-amber-100 bg-white shadow-2xl md:flex-row">
-        <div className="relative flex flex-col justify-between overflow-hidden bg-amber-800 p-10 text-white md:w-2/5">
+    <div className="flex min-h-screen items-center justify-center bg-stone-50 p-4 sm:p-6">
+      <div className="flex w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-amber-100 bg-white shadow-2xl sm:rounded-[2rem] md:flex-row lg:rounded-[2.5rem]">
+        <div className="relative flex flex-col justify-between overflow-hidden bg-amber-800 p-6 text-white sm:p-8 md:w-2/5 lg:p-10">
           <div className="relative z-10">
             <ShieldCheck className="mb-6 h-12 w-12 text-amber-300" />
-            <h2 className="text-3xl leading-tight font-bold">
+            <h2 className="text-2xl leading-tight font-bold sm:text-3xl">
               Admin
               <br />
               Registration
@@ -81,10 +81,10 @@ function Signup() {
             Secure Infrastructure v2.0
           </div>
 
-          <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-amber-700 opacity-50 blur-3xl" />
+          <div className="absolute -bottom-20 -left-20 hidden h-64 w-64 rounded-full bg-amber-700 opacity-50 blur-3xl sm:block" />
         </div>
 
-        <div className="flex-1 bg-white p-10 lg:p-14">
+        <div className="flex-1 bg-white p-6 sm:p-8 lg:p-14">
           <div className="mb-8">
             <h3 className="text-2xl font-bold text-stone-800">Get Started</h3>
             <p className="text-sm text-stone-500">Fill in the details below</p>
@@ -156,7 +156,7 @@ function Signup() {
             <button
               type="submit"
               disabled={loading}
-              className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-amber-800 py-4 font-bold text-white shadow-xl shadow-amber-900/10 transition-all hover:bg-amber-900 active:scale-[0.97] disabled:bg-amber-300"
+              className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-amber-800 py-4 text-center font-bold text-white shadow-xl shadow-amber-900/10 transition-all hover:bg-amber-900 active:scale-[0.97] disabled:bg-amber-300"
             >
               {loading ? (
                 "Processing..."

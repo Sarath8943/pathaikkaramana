@@ -67,7 +67,7 @@ export const AdminProfile = () => {
         setIsEditing(false);
         setSelectedFile(null);
       }
-    } catch (err) {
+    } catch {
       setMessage({ text: "Update failed. Try again.", type: "error" });
     } finally {
       setLoading(false);
@@ -79,13 +79,13 @@ export const AdminProfile = () => {
   }`;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-700">
-      <div className="bg-white rounded-[2.5rem] shadow-sm border border-stone-100 overflow-hidden">
-        <div className="bg-amber-900 h-24 relative"></div>
-        <div className="px-6 md:px-10 pb-10">
-          <div className="relative -mt-12 mb-8 flex flex-col md:flex-row items-center md:items-end gap-6">
+    <div className="mx-auto max-w-4xl space-y-6 animate-in fade-in duration-700">
+      <div className="overflow-hidden rounded-2xl border border-stone-100 bg-white shadow-sm sm:rounded-[2rem] lg:rounded-[2.5rem]">
+        <div className="relative h-24 bg-amber-900"></div>
+        <div className="px-4 pb-8 sm:px-6 md:px-10 md:pb-10">
+          <div className="relative -mt-12 mb-8 flex flex-col items-center gap-5 md:flex-row md:items-end md:gap-6">
             <div className="relative group">
-              <div className="w-32 h-32 rounded-[2rem] bg-stone-200 border-4 border-white shadow-xl overflow-hidden flex items-center justify-center">
+              <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-3xl border-4 border-white bg-stone-200 shadow-xl sm:h-32 sm:w-32 sm:rounded-[2rem]">
                 {preview ? <img src={preview} alt="Profile" className="w-full h-full object-cover" /> : <User size={50} className="text-stone-400" />}
               </div>
               {isEditing && (
@@ -94,25 +94,25 @@ export const AdminProfile = () => {
                 </label>
               )}
             </div>
-            <div className="flex-1 text-center md:text-left">
-              <h2 className="text-2xl font-black text-stone-800 uppercase tracking-tight">{adminData.name || "Admin"}</h2>
+            <div className="min-w-0 flex-1 text-center md:text-left">
+              <h2 className="break-words text-2xl font-black tracking-tight text-stone-800 uppercase">{adminData.name || "Admin"}</h2>
               <p className="text-amber-700 font-bold text-xs uppercase tracking-widest mt-1 flex items-center justify-center md:justify-start gap-1"><Shield size={14} /> System Administrator</p>
             </div>
-            <button onClick={() => isEditing ? handleSave() : setIsEditing(true)} className={`px-8 py-3 rounded-2xl font-bold transition-all shadow-lg ${isEditing ? "bg-emerald-600 text-white hover:bg-emerald-700" : "bg-stone-900 text-white hover:bg-stone-800"}`}>{loading ? "Saving..." : isEditing ? "Save Changes" : "Edit Profile"}</button>
+            <button onClick={() => isEditing ? handleSave() : setIsEditing(true)} className={`w-full rounded-2xl px-8 py-3 font-bold shadow-lg transition-all sm:w-auto ${isEditing ? "bg-emerald-600 text-white hover:bg-emerald-700" : "bg-stone-900 text-white hover:bg-stone-800"}`}>{loading ? "Saving..." : isEditing ? "Save Changes" : "Edit Profile"}</button>
           </div>
           {message.text && (
             <div className={`mb-6 p-4 rounded-xl text-sm font-bold flex items-center gap-2 ${message.type === "success" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>
               {message.type === "success" ? <CheckCircle size={18} /> : <AlertCircle size={18} />}{message.text}
             </div>
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
             <div className="space-y-2"><label className="text-[10px] font-black text-stone-400 uppercase tracking-widest ml-1">Full Name</label><input disabled={!isEditing} className={inputStyle} value={adminData.name} onChange={(e) => setAdminData({ ...adminData, name: e.target.value })} /></div>
             <div className="space-y-2"><label className="text-[10px] font-black text-stone-400 uppercase tracking-widest ml-1">Phone Number</label><input disabled={!isEditing} className={inputStyle} value={adminData.phone} onChange={(e) => setAdminData({ ...adminData, phone: e.target.value })} /></div>
             <div className="space-y-2 md:col-span-2"><label className="text-[10px] font-black text-stone-400 uppercase tracking-widest ml-1">Email Address</label><input disabled={!isEditing} className={inputStyle} value={adminData.email} onChange={(e) => setAdminData({ ...adminData, email: e.target.value })} /></div>
           </div>
         </div>
       </div>
-      <div className="flex justify-center"><button onClick={() => navigate("/dashboard/change-password")} className="flex items-center gap-2 text-stone-400 hover:text-amber-800 transition-colors py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-widest"><Lock size={14} /> Change Account Password</button></div>
+      <div className="flex justify-center"><button onClick={() => navigate("/dashboard/change-password")} className="flex flex-wrap items-center justify-center gap-2 rounded-lg px-4 py-2 text-center text-xs font-bold tracking-widest text-stone-400 uppercase transition-colors hover:text-amber-800"><Lock size={14} /> Change Account Password</button></div>
     </div>
   );
 };

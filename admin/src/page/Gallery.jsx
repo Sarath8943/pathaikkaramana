@@ -67,13 +67,13 @@ export const Gallery = () => {
   };
 
   return (
-    <div className="min-h-screen max-w-7xl mx-auto bg-amber-50/20 p-4 md:p-8 font-sans">
-      <header className="mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-        <h1 className="text-4xl font-black uppercase italic tracking-tighter text-amber-950">
+    <div className="mx-auto max-w-7xl bg-amber-50/20 font-sans">
+      <header className="mb-6 flex flex-col items-start justify-between gap-4 sm:mb-8 md:flex-row md:items-end">
+        <h1 className="text-3xl font-black tracking-tight text-amber-950 uppercase italic sm:text-4xl">
           Gallery
         </h1>
-        <div className="flex gap-4">
-          <div className="min-w-27.5 rounded-3xl border-b-4 border-amber-800 bg-white p-4 text-center shadow-sm">
+        <div className="grid w-full grid-cols-2 gap-3 sm:w-auto sm:gap-4">
+          <div className="rounded-2xl border-b-4 border-amber-800 bg-white p-4 text-center shadow-sm sm:min-w-28 sm:rounded-3xl">
             <p className="text-[10px] font-black uppercase text-amber-500">
               Photos
             </p>
@@ -81,7 +81,7 @@ export const Gallery = () => {
               {mediaList.filter((item) => item.type === "image").length}
             </p>
           </div>
-          <div className="min-w-27.5 rounded-3xl border-b-4 border-amber-950 bg-white p-4 text-center shadow-sm">
+          <div className="rounded-2xl border-b-4 border-amber-950 bg-white p-4 text-center shadow-sm sm:min-w-28 sm:rounded-3xl">
             <p className="text-[10px] font-black uppercase text-amber-500">
               Videos
             </p>
@@ -92,10 +92,10 @@ export const Gallery = () => {
         </div>
       </header>
 
-      <div className="mb-16 rounded-[3rem] border border-amber-100 bg-white p-6 shadow-xl md:p-10">
+      <div className="mb-8 rounded-2xl border border-amber-100 bg-white p-4 shadow-xl sm:p-6 md:mb-12 md:p-8 lg:rounded-[2rem]">
         <form
           onSubmit={handleUpload}
-          className="grid grid-cols-1 items-end gap-8 md:grid-cols-3"
+          className="grid grid-cols-1 items-end gap-5 md:grid-cols-3 md:gap-8"
         >
           <div className="space-y-3">
             <label className="ml-2 text-[11px] font-black uppercase text-amber-600">
@@ -124,7 +124,7 @@ export const Gallery = () => {
           </div>
           <button
             disabled={uploading}
-            className={`w-full h-14.5 rounded-2xl py-4.5 font-black tracking-widest text-white ${
+            className={`h-14 w-full rounded-2xl py-4 font-black tracking-widest text-white ${
               uploading
                 ? "bg-amber-700 animate-pulse"
                 : "bg-amber-900 hover:bg-amber-800"
@@ -135,11 +135,16 @@ export const Gallery = () => {
         </form>
       </div>
 
-      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      {loading ? (
+        <div className="rounded-2xl border border-amber-100 bg-white p-8 text-center text-sm font-bold tracking-widest text-amber-800 uppercase shadow-sm">
+          Loading media...
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 lg:gap-6">
         {mediaList.map((item) => (
           <div
             key={item._id}
-            className="group relative aspect-square overflow-hidden rounded-[2.5rem] border-4 border-white bg-white shadow-md transition-all hover:shadow-2xl"
+            className="group relative aspect-square overflow-hidden rounded-2xl border-4 border-white bg-white shadow-md transition-all hover:shadow-2xl sm:rounded-[2rem]"
           >
             {item.type === "image" ? (
               <img
@@ -157,40 +162,41 @@ export const Gallery = () => {
                   />
                 ) : null}
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                  <FiVideo size={48} className="text-white/70" />
+                  <FiVideo size={40} className="text-white/70 sm:size-12" />
                 </div>
                 <div className="absolute right-3 bottom-3 rounded-full bg-black/60 px-3 py-1 text-[10px] font-black tracking-[0.2em] text-white">
                   VIDEO
                 </div>
               </div>
             )}
-            <div className="absolute top-4 left-4 rounded-2xl bg-white/90 px-3 py-1.5 text-[10px] font-black text-amber-900">
+            <div className="absolute top-3 left-3 rounded-2xl bg-white/90 px-3 py-1.5 text-[10px] font-black text-amber-900 sm:top-4 sm:left-4">
               {item.year}
             </div>
-            <div className="absolute inset-0 flex items-center justify-center gap-4 bg-amber-950/60 opacity-0 transition-all group-hover:opacity-100">
+            <div className="absolute inset-0 flex items-center justify-center gap-3 bg-amber-950/60 opacity-0 transition-all group-hover:opacity-100 sm:gap-4">
               <button
                 onClick={() => setPreviewItem(item)}
-                className="rounded-2xl bg-white p-4 text-amber-950"
+                className="rounded-2xl bg-white p-3 text-amber-950 sm:p-4"
               >
                 <FiEye size={22} />
               </button>
               <button
                 onClick={() => handleDelete(item._id)}
-                className="rounded-2xl bg-red-500 p-4 text-white"
+                className="rounded-2xl bg-red-500 p-3 text-white sm:p-4"
               >
                 <FiTrash2 size={22} />
               </button>
             </div>
           </div>
         ))}
-      </div>
+        </div>
+      )}
 
       {previewItem && (
         <div
-          className="fixed inset-0 z-200 flex items-center justify-center bg-black/95 p-4 backdrop-blur-md"
+          className="fixed inset-0 z-200 flex items-center justify-center bg-black/95 p-4 backdrop-blur-md sm:p-6"
           onClick={() => setPreviewItem(null)}
         >
-          <button className="absolute top-8 right-8 text-white">
+          <button className="absolute top-4 right-4 text-white sm:top-8 sm:right-8">
             <FiX size={32} />
           </button>
           {previewItem.type === "image" ? (

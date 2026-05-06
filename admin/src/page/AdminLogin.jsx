@@ -77,12 +77,12 @@ export const Login = () => {
     "absolute left-3 top-1/2 -translate-y-1/2 text-amber-700 w-5 h-5";
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-stone-50 p-6">
-      <div className="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-amber-100">
-        <div className="md:w-2/5 bg-amber-800 p-10 text-white flex flex-col justify-between relative overflow-hidden">
+    <div className="flex min-h-screen items-center justify-center bg-stone-50 p-4 sm:p-6">
+      <div className="flex w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-amber-100 bg-white shadow-2xl sm:rounded-[2rem] md:flex-row lg:rounded-[2.5rem]">
+        <div className="relative flex flex-col justify-between overflow-hidden bg-amber-800 p-6 text-white sm:p-8 md:w-2/5 lg:p-10">
           <div className="relative z-10">
             <ShieldCheck className="w-12 h-12 mb-6 text-amber-300" />
-            <h2 className="text-3xl font-bold leading-tight">
+            <h2 className="text-2xl font-bold leading-tight sm:text-3xl">
               Admin
             </h2>
             <p className="text-amber-100/80 mt-4 font-light leading-relaxed">
@@ -93,10 +93,10 @@ export const Login = () => {
           <div className="relative z-10 text-sm text-amber-200/50 italic font-mono">
             System Auth v2.1
           </div>
-          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-amber-700 rounded-full opacity-50 blur-3xl"></div>
+          <div className="absolute -bottom-20 -left-20 hidden h-64 w-64 rounded-full bg-amber-700 opacity-50 blur-3xl sm:block"></div>
         </div>
 
-        <div className="flex-1 p-10 lg:p-14 bg-white">
+        <div className="flex-1 bg-white p-6 sm:p-8 lg:p-14">
           <div className="mb-8">
             <h3 className="text-2xl font-bold text-stone-800">Welcome Back</h3>
             <p className="text-stone-500 text-sm">
@@ -107,14 +107,16 @@ export const Login = () => {
           {isOffline && (
             <div className="mb-4 p-4 rounded-xl text-sm font-medium bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-2">
               <AlertCircle size={18} />
-              You appear to be offline. The admin login needs an internet connection.
+              <span className="min-w-0">
+                You appear to be offline. The admin login needs an internet connection.
+              </span>
             </div>
           )}
 
           {error && (
             <div className="mb-6 p-4 rounded-xl text-sm font-medium bg-rose-50 text-rose-700 border border-rose-100 flex items-center gap-2">
               <AlertCircle size={18} />
-              {error}
+              <span className="min-w-0">{error}</span>
             </div>
           )}
 

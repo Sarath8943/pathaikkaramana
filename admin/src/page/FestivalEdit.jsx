@@ -151,28 +151,28 @@ const Festival = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">Loading...</div>
+      <div className="flex min-h-[50vh] items-center justify-center">Loading...</div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4">
-      <div className="max-w-6xl mx-auto flex flex-col gap-4 p-6 bg-gray-100 rounded-xl shadow-inner mb-10 border border-gray-200">
-        <div className="flex items-center justify-between">
+    <div className="bg-slate-50">
+      <div className="mx-auto mb-8 flex max-w-6xl flex-col gap-4 rounded-xl border border-gray-200 bg-gray-100 p-4 shadow-inner sm:p-6 lg:mb-10">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-xl font-semibold text-gray-700"> Festival</h2>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             {isAdmin && (
               <button
                 onClick={saveToDatabase}
                 disabled={isSaving || isUploadingPdf}
-                className="px-4 py-1.5 rounded-full text-sm font-medium transition-colors bg-green-600 hover:bg-green-700 text-white shadow-md disabled:bg-green-400"
+                className="rounded-full bg-green-600 px-4 py-1.5 text-sm font-medium text-white shadow-md transition-colors hover:bg-green-700 disabled:bg-green-400"
               >
                 {isSaving ? "Saving..." : "update"}
               </button>
             )}
             <button
               onClick={() => setIsAdmin(!isAdmin)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
                 isAdmin
                   ? "bg-red-500 hover:bg-red-600 text-white"
                   : "bg-gray-200 hover:bg-gray-300 text-gray-800"
@@ -186,7 +186,7 @@ const Festival = () => {
         {isAdmin && (
           <div className="space-y-4 pt-4 border-t border-gray-200">
             <h3 className="font-semibold text-gray-800">1. മുകളിലെ വിവരങ്ങൾ</h3>
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <input
                 type="text"
                 value={datesInfo}
@@ -213,7 +213,7 @@ const Festival = () => {
             <h3 className="font-semibold text-gray-800 mt-6 pt-4 border-t border-gray-200">
               2. PDF & കാർഡുകൾ
             </h3>
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="border rounded-lg bg-white p-4 space-y-3">
                 <p className="text-sm font-medium text-gray-700">
                   ഇപ്പോഴുള്ള PDF:
@@ -251,7 +251,7 @@ const Festival = () => {
               </div>
               <button
                 onClick={addDayCard}
-                className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-5 py-2 rounded-lg text-sm"
+                className="rounded-lg bg-orange-500 px-5 py-3 text-sm font-medium text-white hover:bg-orange-600 md:py-2"
               >
                 പുതിയ കാർഡ് ചേർക്കുക
               </button>
@@ -260,15 +260,15 @@ const Festival = () => {
         )}
       </div>
 
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row items-center justify-center mb-12 gap-6">
-          <div className="w-full md:w-auto bg-[#7b3f00] text-center text-yellow-400 px-10 py-6 rounded-lg shadow-md">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-8 flex flex-col items-center justify-center gap-6 md:mb-12 md:flex-row">
+          <div className="w-full rounded-lg bg-[#7b3f00] px-4 py-5 text-center text-yellow-400 shadow-md sm:px-8 sm:py-6 md:w-auto md:px-10">
             <p className="text-sm md:text-base mb-1">
               {datesInfo}
               <br />
               <span className="text-[13px] text-yellow-200">{malayalamDates}</span>
             </p>
-            <h3 className="text-2xl font-bold mt-1">{highlightDate}</h3>
+            <h3 className="mt-1 text-xl font-bold sm:text-2xl">{highlightDate}</h3>
           </div>
         </div>
 
@@ -279,11 +279,11 @@ const Festival = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+        <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2 lg:gap-8">
           {scheduleData.map((day, dayIndex) => (
             <div
               key={dayIndex}
-              className="relative flex flex-col h-full border border-gray-100 rounded-3xl p-4 bg-white shadow-sm"
+              className="relative flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:p-4 lg:rounded-3xl"
             >
               {isAdmin && (
                 <button
@@ -294,7 +294,7 @@ const Festival = () => {
                 </button>
               )}
 
-              <div className="w-full text-center my-6 py-6 px-4 bg-yellow-50 rounded-2xl shadow-lg border border-yellow-100">
+              <div className="my-5 w-full rounded-2xl border border-yellow-100 bg-yellow-50 px-3 py-5 text-center shadow-lg sm:my-6 sm:px-4 sm:py-6">
                 {isAdmin ? (
                   <div className="space-y-2">
                     <input
@@ -310,13 +310,13 @@ const Festival = () => {
                     />
                   </div>
                 ) : (
-                  <h3 className="text-xl font-semibold text-[#8b4513] mt-1">
+                  <h3 className="mt-1 break-words text-lg font-semibold text-[#8b4513] sm:text-xl">
                     {day.title}
                   </h3>
                 )}
               </div>
 
-              <div className="bg-[#f7f3eb] shadow-xl rounded-xl w-full grow relative mt-4 flex flex-col p-6 pt-10 border border-[#e5dfd4]">
+              <div className="relative mt-4 flex w-full grow flex-col rounded-xl border border-[#e5dfd4] bg-[#f7f3eb] p-4 pt-10 shadow-xl sm:p-6 sm:pt-10">
                 {isAdmin ? (
                   <input
                     type="text"
@@ -326,10 +326,10 @@ const Festival = () => {
                       newData[dayIndex].date = e.target.value;
                       setScheduleData(newData);
                     }}
-                    className="absolute -top-5 left-0 bg-[#8b4513] text-white px-5 py-1 rounded-r-2xl text-sm font-semibold border-none outline-none w-32"
+                    className="absolute -top-5 left-0 w-32 rounded-r-2xl border-none bg-[#8b4513] px-5 py-1 text-sm font-semibold text-white outline-none"
                   />
                 ) : (
-                  <div className="absolute -top-5 left-0 bg-[#8b4513] text-white px-5 py-1 rounded-r-2xl text-sm font-semibold">
+                  <div className="absolute -top-5 left-0 rounded-r-2xl bg-[#8b4513] px-5 py-1 text-sm font-semibold text-white">
                     {day.date}
                   </div>
                 )}
@@ -370,10 +370,10 @@ const Festival = () => {
                         </div>
                       ) : (
                         <>
-                          <p className="text-red-700 font-semibold text-sm mb-1">
+                          <p className="mb-1 text-sm font-semibold text-red-700">
                             {event.time}
                           </p>
-                          <p className="text-gray-800 font-medium text-sm">
+                          <p className="break-words text-sm font-medium text-gray-800">
                             {event.details}
                           </p>
                         </>

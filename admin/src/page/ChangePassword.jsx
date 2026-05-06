@@ -45,7 +45,7 @@ const ChangePassword = () => {
     setFeedback({ message: "", type: "" });
 
     try {
-      const response = await axiosInstance.put("/admin/change-password", {
+      await axiosInstance.put("/admin/change-password", {
         oldPassword: passwords.oldPassword,
         newPassword: passwords.newPassword,
       });
@@ -78,16 +78,16 @@ const ChangePassword = () => {
     "absolute right-4 top-1/2 -translate-y-1/2 text-amber-400 hover:text-amber-700 cursor-pointer transition-colors";
 
   return (
-    <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
-      <div className="max-w-xl w-full bg-white rounded-[2.5rem] shadow-2xl border border-amber-100 overflow-hidden">
-        <div className="bg-amber-800 p-8 text-white relative">
+    <div className="flex min-h-[calc(100vh-8rem)] items-center justify-center bg-stone-50">
+      <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-amber-100 bg-white shadow-2xl sm:rounded-[2rem] lg:rounded-[2.5rem]">
+        <div className="relative bg-amber-800 p-5 text-white sm:p-8">
           <button
             type="button"
             onClick={(e) => {
               e.preventDefault();
               navigate("/dashboard/profile");
             }}
-            className="absolute top-6 right-6 text-amber-200 hover:text-white flex items-center gap-1 text-sm font-bold transition-all z-50 cursor-pointer bg-amber-900/30 py-2 px-3 rounded-lg border border-amber-700/50 hover:bg-amber-700"
+            className="relative z-50 mb-5 flex cursor-pointer items-center gap-1 rounded-lg border border-amber-700/50 bg-amber-900/30 px-3 py-2 text-sm font-bold text-amber-200 transition-all hover:bg-amber-700 hover:text-white sm:absolute sm:top-6 sm:right-6 sm:mb-0"
           >
             <ArrowLeft size={18} />
             <span>Back to profile</span>
@@ -104,7 +104,7 @@ const ChangePassword = () => {
           <div className="absolute top-0 right-0 w-32 h-32 bg-amber-700/30 rounded-full -mr-16 -mt-16 blur-2xl pointer-events-none"></div>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 lg:p-12 space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 p-5 sm:p-8 lg:p-12">
           {feedback.message && (
             <div
               className={`p-4 rounded-2xl text-sm font-medium flex items-center gap-3 animate-bounce-short ${
@@ -146,7 +146,7 @@ const ChangePassword = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <div className="grid grid-cols-1 gap-5 pt-2 md:grid-cols-2 md:gap-6">
             <div className="space-y-1">
               <label className="text-xs font-bold uppercase tracking-widest text-amber-900 ml-1">
                 New Password
@@ -200,7 +200,7 @@ const ChangePassword = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-amber-800 text-white py-4 rounded-2xl font-bold text-lg hover:bg-amber-900 transition-all active:scale-[0.98] disabled:bg-amber-200 shadow-xl shadow-amber-900/10 flex items-center justify-center gap-2"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-amber-800 py-4 text-base font-bold text-white shadow-xl shadow-amber-900/10 transition-all hover:bg-amber-900 active:scale-[0.98] disabled:bg-amber-200 sm:text-lg"
             >
               {loading ? "Processing..." : " Change Password"}
             </button>

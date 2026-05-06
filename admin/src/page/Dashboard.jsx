@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createElement, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -6,13 +6,18 @@ import {
   ShieldCheck,
   LogOut,
   ChevronDown,
-  UserCircle
+  UserCircle,
+  Menu,
+  X,
+  CalendarDays,
+  HandCoins,
 } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
   const [profileImage, setProfileImage] = useState(localStorage.getItem("profileImage") || "");
 
@@ -52,74 +57,150 @@ export const Dashboard = () => {
     navigate("/login", { replace: true });
   };
 
-  const navLinkStyle = (path) => `
-    flex items-center gap-3 p-3 rounded-xl transition-all duration-200
-    ${location.pathname === path ? "bg-amber-700 text-white shadow-lg" : "hover:bg-amber-800/50 text-amber-100"}
-  `;
+  const navItems = [
+    { to: "/dashboard", label: "Overview", icon: LayoutDashboard },
+    { to: "/dashboard/gallery", label: "Gallery", icon: GalleryIcon },
+    { to: "/dashboard/festival", label: "Festival", icon: CalendarDays },
+    { to: "/dashboard/offerings", label: "Offering", icon: HandCoins },
+  ];
+
+  const isActiveRoute = (path) =>
+    path === "/dashboard"
+      ? location.pathname === "/dashboard"
+      : location.pathname.startsWith(path);
+
+  const navLinkStyle = (path) =>
+    `flex items-center gap-3 rounded-xl p-3 transition-all duration-200 ${
+      isActiveRoute(path)
+        ? "bg-amber-700 text-white shadow-lg"
+        : "text-amber-100 hover:bg-amber-800/50"
+    }`;
+
+  const pageTitle =
+    location.pathname === "/dashboard"
+      ? "Dashboard / Overview"
+      : location.pathname
+          .replace("/dashboard/", "Dashboard / ")
+          .replace(/-/g, " ");
+
+  const sidebarContent = (
+    <>
+      <div className="flex items-center gap-3 border-b border-amber-900 px-2 pb-6 lg:mb-10">
+        <div className="rounded-xl bg-amber-100 p-2">
+          <ShieldCheck className="h-6 w-6 text-amber-950" />
+        </div>
+        <h2 className="text-lg font-black tracking-widest uppercase sm:text-xl">
+          Admin Panel
+        </h2>
+      </div>
+
+      <nav className="mt-6 flex-1 space-y-2 lg:mt-0">
+        {navItems.map(({ to, label, icon }) => (
+          <Link
+            key={to}
+            to={to}
+            onClick={() => setSidebarOpen(false)}
+            className={navLinkStyle(to)}
+          >
+            {createElement(icon, { size: 20 })}
+            <span className="text-xs font-semibold tracking-wider uppercase">
+              {label}
+            </span>
+          </Link>
+        ))}
+      </nav>
+
+      <div className="mt-8 border-t border-amber-900 pt-6">
+        <button
+          onClick={handleLogout}
+          className="group flex w-full items-center justify-center gap-2 rounded-xl bg-red-500/10 py-3 font-bold text-red-400 transition-all hover:bg-red-500 hover:text-white"
+        >
+          <LogOut size={18} /> Logout
+        </button>
+      </div>
+    </>
+  );
 
   return (
-    <div className="flex min-h-screen bg-stone-50 text-stone-900 font-sans">
-      <aside className="w-72 bg-amber-950 text-white p-6 flex flex-col shadow-2xl z-10">
-        <div className="flex items-center gap-3 mb-10 px-2 border-b border-amber-900 pb-6">
-          <div className="bg-amber-100 p-2 rounded-xl">
-            <ShieldCheck className="text-amber-950 w-6 h-6" />
-          </div>
-          <h2 className="text-xl font-black uppercase tracking-widest">Admin Panel</h2>
-        </div>
+    <div className="min-h-screen bg-stone-50 font-sans text-stone-900 lg:flex">
+      {sidebarOpen && (
+        <button
+          type="button"
+          aria-label="Close sidebar overlay"
+          className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-        <nav className="space-y-2 flex-1">
-          <Link to="/dashboard" className={navLinkStyle("/Overview")}>
-            <LayoutDashboard size={20} />
-            <span className="font-semibold uppercase text-xs tracking-wider">Overview</span>
-          </Link>
-          <Link to="/dashboard/gallery" className={navLinkStyle("/dashboard/gallery")}>
-            <GalleryIcon size={20} />
-            <span className="font-semibold uppercase text-xs tracking-wider">Gallery </span>
-          </Link>
-            <Link to="/dashboard/festival" className={navLinkStyle("/dashboard/festival")}>
-            <GalleryIcon size={20} />
-            <span className="font-semibold uppercase text-xs tracking-wider">Festvel </span>
-          </Link>
-           <Link to="/dashboard/offerings" className={navLinkStyle("/dashboard/offerings")}>
-            <GalleryIcon size={20} />
-            <span className="font-semibold uppercase text-xs tracking-wider">offering </span>
-          </Link>
-        </nav>
-
-        <div className="mt-auto pt-6 border-t border-amber-900">
-          <button onClick={handleLogout} className="flex items-center justify-center gap-2 w-full bg-red-500/10 text-red-400 py-3 rounded-xl font-bold hover:bg-red-500 transition-all group">
-            <LogOut size={18} /> Logout
-          </button>
-        </div>
+      <aside
+        className={`fixed inset-y-0 left-0 z-40 flex w-[min(18rem,85vw)] flex-col bg-amber-950 p-5 text-white shadow-2xl transition-transform duration-300 lg:sticky lg:top-0 lg:h-screen lg:w-72 lg:translate-x-0 lg:p-6 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          onClick={() => setSidebarOpen(false)}
+          className="absolute top-4 right-4 rounded-xl p-2 text-amber-100 hover:bg-amber-900 lg:hidden"
+        >
+          <X size={20} />
+        </button>
+        {sidebarContent}
       </aside>
 
-      <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        <header className="bg-white border-b border-stone-200 py-4 px-10 flex justify-between items-center shadow-sm z-20">
-          <h1 className="text-amber-900 font-bold text-sm uppercase">
-            {location.pathname.replace("/dashboard", "Dashboard").replace("/", " / ")}
-          </h1>
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-stone-200 bg-white px-4 py-3 shadow-sm sm:px-6 lg:px-10 lg:py-4">
+          <div className="flex min-w-0 items-center gap-3">
+            <button
+              type="button"
+              aria-label="Open sidebar"
+              onClick={() => setSidebarOpen(true)}
+              className="rounded-xl border border-stone-200 p-2 text-amber-900 shadow-sm lg:hidden"
+            >
+              <Menu size={20} />
+            </button>
+            <h1 className="truncate text-xs font-bold text-amber-900 uppercase sm:text-sm">
+              {pageTitle}
+            </h1>
+          </div>
 
-          <Link to="/dashboard/profile" className="flex items-center gap-3 p-1 pr-4 rounded-2xl hover:bg-stone-50 transition-all group">
+          <Link
+            to="/dashboard/profile"
+            className="group flex shrink-0 items-center gap-2 rounded-2xl p-1 transition-all hover:bg-stone-50 sm:gap-3 sm:pr-4"
+          >
             <div className="relative">
-              <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center border border-amber-200 overflow-hidden shadow-sm">
+              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-amber-200 bg-amber-100 shadow-sm">
                 {profileImage ? (
-                  <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                  <img
+                    src={profileImage}
+                    alt="Profile"
+                    className="h-full w-full object-cover"
+                  />
                 ) : (
                   <UserCircle size={28} className="text-amber-900" />
                 )}
               </div>
-              <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
+              <div className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-white bg-green-500"></div>
             </div>
-            <div className="text-left hidden sm:block">
-              <p className="text-[11px] font-black text-stone-800 uppercase leading-none mb-1">Profile</p>
-              <p className="text-[10px] text-stone-400 font-bold leading-none">Manage Account</p>
+            <div className="hidden text-left sm:block">
+              <p className="mb-1 text-[11px] leading-none font-black text-stone-800 uppercase">
+                Profile
+              </p>
+              <p className="text-[10px] leading-none font-bold text-stone-400">
+                Manage Account
+              </p>
             </div>
-            <ChevronDown size={14} className="text-stone-300 group-hover:text-amber-600" />
+            <ChevronDown
+              size={14}
+              className="hidden text-stone-300 group-hover:text-amber-600 sm:block"
+            />
           </Link>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-8 bg-stone-50/50">
-          <div className="max-w-6xl mx-auto"><Outlet /></div>
+        <main className="flex-1 overflow-x-hidden bg-stone-50/50 p-4 sm:p-6 lg:p-8">
+          <div className="mx-auto w-full max-w-6xl">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
